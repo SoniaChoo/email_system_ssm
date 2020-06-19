@@ -9,8 +9,10 @@
 <typeAliases>
     <package name="org.example.pojo"/>
 </typeAliases>
-
-    <mappers>
-        <mapper resource="org/example/dao/UserMapper.xml"></mapper>
-    </mappers>
+<plugins>
+    <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        <!--<property name="dialect" value="mysql"/>-->
+        <!--在com.github.pagehelper.PageHelper这个包为4.0以后的就不用写下面的数据库类型了，会自动识别-->
+    </plugin>
+</plugins>
 </configuration>
