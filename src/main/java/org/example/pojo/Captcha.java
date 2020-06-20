@@ -1,5 +1,6 @@
 package org.example.pojo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -15,11 +16,25 @@ import java.sql.Timestamp;
 @Table(name="captcha")
 public class Captcha implements Serializable {
     @Id
+    @JSONField(name="captchaId")
     private String captchaId;
+
+    @JSONField(name="from")
     private String captchaFrom;
+
+    @JSONField(name="to")
     private String captchaTo;
+
+    @JSONField(name="subject")
     private String captchaSubject;
+
+    @JSONField(name="text")
     private String captchaContent;
+
     private Integer captchaRead;
-    private Timestamp captchaCreateTime;
+
+    @JSONField(name="date",format="E, dd MMM yyyy HH:mm:ss Z")
+    private Date captchaSendTime;
+
+    private Date captchaReceiveTime;
 }

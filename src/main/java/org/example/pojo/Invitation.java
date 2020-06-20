@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class Invitation implements Serializable {
     private String invitationCode;
     private Integer invitationLifetime;
     private String invitationEmail;
-    private Timestamp invitationActivateTime;
+    private Date invitationActivateTime;
     private Integer invitationCaptchaCount;
-    private Timestamp invitationFirstCaptchaTime;
+    private Date invitationFirstCaptchaTime;
 }

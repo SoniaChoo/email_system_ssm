@@ -1,5 +1,7 @@
 package org.example.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jdk.nashorn.internal.ir.annotations.Reference;
@@ -10,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.lang.reflect.Array;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class CaptchaServiceImpl implements CaptchaService{
@@ -48,6 +53,22 @@ public class CaptchaServiceImpl implements CaptchaService{
     }
 
     public void insert(Captcha captcha) {
+        if (captcha.getCaptchaId() == null) {
+            captcha.setCaptchaId(UUID.randomUUID().toString());
+        }
+        if(captcha.getCaptchaReceiveTime()==null){
+            captcha.setCaptchaReceiveTime(new Date());
+        }
+
+        Map<String,String> map = JSON.parseObject(captcha.getCaptchaFrom(), Map.class);
+        captcha.setCaptchaFrom(map.get("email"));
+
+        JSONArray array = JSON.parseObject(captcha.getCaptchaTo(),JSONArray.class);
+        if (array.size() != 0) {
+            Map<String, String> stringMap = (Map<String, String>) array.get(0);
+            captcha.setCaptchaTo(stringMap.get("email"));
+        }
+
         captchaMapper.insert(captcha);
     }
 
