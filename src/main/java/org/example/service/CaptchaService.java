@@ -4,8 +4,6 @@ import org.example.entity.PageResult;
 import org.example.entity.Result;
 import org.example.pojo.Captcha;
 import org.springframework.stereotype.Service;
-
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +18,7 @@ public interface CaptchaService {
 
     //分页
     public PageResult<Captcha> selectPage(int page,int size);
+
     //根据条件查找
     public List<Captcha> selectList(Map<String,Object> searchmap);
 
