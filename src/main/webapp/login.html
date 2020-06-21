@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./statics/jquery-3.5.1.js"></script>
+    <script>
+        function validate() {
+            $.ajax({
+                url:"./invitation/checkInvitation",
+                data:{"invitationCode":$("#invitationCode").val()},
+                success:function (data) {
+                    alert(data);
+                    console.log(data.toString());
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<div>
+    <span>邀请码:</span> <input type="text" id="invitationCode" >
+    <span>提交</span><input type="button" onclick="validate()">
+</div>
+</body>
+</html>

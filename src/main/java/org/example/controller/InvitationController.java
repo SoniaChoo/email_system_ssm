@@ -71,10 +71,11 @@ public class InvitationController {
     }
 
 
-    @GetMapping("/checkInvitation")
+    @RequestMapping("/checkInvitation")
     @ResponseBody
     public String checkInvitation(String invitationCode) {
         String msg = invitationService.checkInvitation(invitationCode);
+        System.out.println(msg);
         return msg;
     }
 }

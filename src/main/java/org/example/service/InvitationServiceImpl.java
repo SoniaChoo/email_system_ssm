@@ -61,21 +61,19 @@ public class InvitationServiceImpl implements InvitationService{
             invitationMapper.deleteByPrimaryKey(id);
     }
 
-
     @Autowired
     private AccountMapper accountMapper;
     //验证邀请码的有效性,若有效,并返回一个邮箱账号密码
     @Transactional
     public String checkInvitation(String invitationCode) {
-        System.out.println("++++++++++++++++++++++++++++++++++++++");
         String msg = "";
         Map<String,Object> searchmap = new HashMap<String, Object>();
         searchmap.put("invitationCode",invitationCode);
         List<Invitation> invitations = invitationMapper.selectByExample(createExample(searchmap));
         //如果根据该邀请码在数据库中匹配不到,那么返回验证码不正确
         if(invitations.size() == 0) {
-            msg = "验证码不正确";
-            System.out.println(msg);
+            msg = "123abc+验证码不正确+456ztr";
+            System.out.println("inside InvitationServiceImpl.java :"+msg);
             return msg;
         }
         Invitation invitation = invitations.get(0);
