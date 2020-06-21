@@ -18,6 +18,9 @@ public interface AccountService {
     //根据条件查找
     public List<Account> selectList(Map<String,Object> searchmap);
 
+    //查询(顺序)
+    public Account selectOrder();
+
     //根据条件和分页查询
     public PageResult<Account> selectPage(Map<String,Object> searchmap,int page,int size);
 

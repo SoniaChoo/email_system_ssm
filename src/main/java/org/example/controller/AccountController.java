@@ -48,6 +48,12 @@ public class AccountController {
         return accountService.selectList(searchmap);
     }
 
+    @GetMapping("/selectOrder")
+    @ResponseBody
+    public Account selectOrder(){
+        return accountService.selectOrder();
+    }
+
     @PostMapping("/insert")
     @ResponseBody
     public Result insert(@RequestBody Account account){
@@ -68,4 +74,6 @@ public class AccountController {
         accountService.delete(id);
         return new Result();
     }
+
+
 }

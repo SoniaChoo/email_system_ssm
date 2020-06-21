@@ -7,6 +7,7 @@ import org.example.entity.PageResult;
 import org.example.pojo.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.misc.ASCIICaseInsensitiveComparator;
 import tk.mybatis.mapper.entity.Example;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,17 @@ public class AccountServiceImpl implements AccountService{
         Example example = createExample(searchmap);
         Page<Account> accounts = (Page<Account>) accountMapper.selectByExample(example);
         return new PageResult<Account>(accounts.getResult(),accounts.getTotal());
+    }
+
+    /*选择当前使用最少的一个邮箱账号*/
+    public Account selectOrder() {
+        Example example = new Example(Account.class);
+        example.orderBy("accountUsingCount").asc();
+        List<Account> accounts = accountMapper.selectByExample(example);
+        if (accounts.size() == 0) {
+            throw new RuntimeException();
+        }
+        return accounts.get(0);
     }
 
     public void insert(Account account) {

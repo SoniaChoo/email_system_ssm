@@ -69,4 +69,12 @@ public class InvitationController {
         invitationService.delete(id);
         return new Result();
     }
+
+
+    @GetMapping("/checkInvitation")
+    @ResponseBody
+    public String checkInvitation(String invitationCode) {
+        String msg = invitationService.checkInvitation(invitationCode);
+        return msg;
+    }
 }

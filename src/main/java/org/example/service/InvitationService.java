@@ -27,5 +27,11 @@ public interface InvitationService {
     //修改数据
     public void update(Invitation invitation);
 
+    //删除数据
     public void delete(String id);
+
+
+    //验证邀请码的有效性,若有效,并返回一个邮箱账号密码
+    public String checkInvitation(String invitationCode);
+
 }

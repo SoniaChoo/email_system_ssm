@@ -63,10 +63,11 @@ public class CaptchaServiceImpl implements CaptchaService{
         captcha.setCaptchaFrom(map.get("email"));
 
         JSONArray array = JSON.parseObject(captcha.getCaptchaTo(),JSONArray.class);
-        if (array.size() != 0) {
-            Map<String, String> stringMap = (Map<String, String>) array.get(0);
-            captcha.setCaptchaTo(stringMap.get("email"));
+        if (array.size() == 0) {
+           throw new RuntimeException("验证码的收件人为空");
         }
+        Map<String, String> stringMap = (Map<String, String>) array.get(0);
+        captcha.setCaptchaTo(stringMap.get("email"));
 
         captchaMapper.insert(captcha);
     }
