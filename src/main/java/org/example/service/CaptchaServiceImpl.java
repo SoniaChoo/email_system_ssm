@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jdk.nashorn.internal.ir.annotations.Reference;
+import org.example.Util;
 import org.example.dao.CaptchaMapper;
+import org.example.dao.InvitationMapper;
 import org.example.entity.PageResult;
 import org.example.pojo.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,11 @@ public class CaptchaServiceImpl implements CaptchaService{
         if (array.size() == 0) {
            throw new RuntimeException("验证码的收件人为空");
         }
+
+        //通过正则表达式解析出html里面的验证码
+        String captchCodeByRegex = Util.getCaptchCodeByRegex(captcha.getCaptchaHtml());
+        captcha.setCaptchaCode(captchCodeByRegex);
+
         Map<String, String> stringMap = (Map<String, String>) array.get(0);
         captcha.setCaptchaTo(stringMap.get("email"));
 

@@ -1,5 +1,7 @@
 package org.example.controller;
 
+import org.example.entity.CaptchaResult;
+import org.example.entity.InvitationResult;
 import org.example.entity.PageResult;
 import org.example.entity.Result;
 import org.example.pojo.Invitation;
@@ -73,9 +75,15 @@ public class InvitationController {
 
     @RequestMapping("/checkInvitation")
     @ResponseBody
-    public String checkInvitation(String invitationCode) {
-        String msg = invitationService.checkInvitation(invitationCode);
-        System.out.println(msg);
-        return msg;
+    public InvitationResult checkInvitation(String invitationCode) {
+        InvitationResult invitationResult = invitationService.checkInvitation(invitationCode);
+        return invitationResult;
+    }
+
+    @RequestMapping("/searchCaptcha")
+    @ResponseBody
+    public CaptchaResult searchCaptcha(String invitationCode, String captchaTo) {
+        CaptchaResult captchaResult = invitationService.searchCaptcha(invitationCode, captchaTo);
+        return captchaResult;
     }
 }

@@ -26,21 +26,20 @@
                     var html = "";
                     if (rdata.code === -1) {
                         html = "<div>"+"邀请码不能为空"+"</div>"
+                        $("#myaccountInfo").html(html)
                     }else if(rdata.code===1){
                         html = "<div>"+"邀请码不正确"+"</div>";
+                        $("#myaccountInfo").html(html)
                     }else if(rdata.code===2){
                         html = "<div>"+"邀请码已过期,请重新购买"+"</div>";
+                        $("#myaccountInfo").html(html)
                     }else{
-                        html="<div id='myaccount'>" +"账号:" +rdata.data.accountEmail+"</div>"
-                        +"<div id='mypassword'>" +"密码:" +rdata.data.accountPassword+"</div>";
+                        document.location.href="/index.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail;
+                        // html="<div id='myaccount'>" +"账号:" +rdata.data.accountEmail+"</div>"
+                        //     +"<div id='mypassword'>" +"密码:" +rdata.data.accountPassword+"</div>";
                     }
-                    $("#myaccountInfo").html(html)
-            }
-        })
-        }
-
-        function goto() {
-            window.location.href="index.html"
+                }
+            })
         }
     </script>
 </head>
@@ -83,12 +82,10 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color: #398439">重新输入邀请码
                 </button>
-                <button type="button" class="btn btn-primary" onclick="goto()">登录后点我</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
-
 
 
 

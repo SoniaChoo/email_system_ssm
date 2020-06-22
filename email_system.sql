@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50730
 File Encoding         : 65001
 
-Date: 2020-06-20 16:25:27
+Date: 2020-06-22 13:57:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -30,6 +30,11 @@ CREATE TABLE `account` (
 -- ----------------------------
 -- Records of account
 -- ----------------------------
+INSERT INTO `account` VALUES ('1111111', 'nucm1@wangpanhuiyuan.com', '656565', '5');
+INSERT INTO `account` VALUES ('2222222', 'nucm2@wangpanhuiyuan.com', '656565', '9');
+INSERT INTO `account` VALUES ('666666', 'nucm6@wangpanhuiyuan.com', '656565', '3');
+INSERT INTO `account` VALUES ('66668888', 'nucm68@wangpanhuiyuan.com', '656565', '3');
+INSERT INTO `account` VALUES ('8888', 'nucm8@wangpanhuiyuan.com', '656565', '5');
 
 -- ----------------------------
 -- Table structure for captcha
@@ -41,17 +46,25 @@ CREATE TABLE `captcha` (
   `captcha_to` varchar(255) DEFAULT NULL COMMENT '邮箱账号',
   `captcha_subject` varchar(255) DEFAULT NULL COMMENT '邮件主题',
   `captcha_content` text COMMENT '邮件内容',
+  `captcha_code` varchar(255) DEFAULT NULL,
+  `captcha_html` varchar(255) DEFAULT NULL,
   `captcha_read` int(11) DEFAULT NULL COMMENT '是否已读',
+  `captcha_receive_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '收件时间',
   `captcha_send_time` datetime DEFAULT NULL,
-  `captcha_receive_time` datetime DEFAULT NULL COMMENT '收件时间',
   PRIMARY KEY (`captcha_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of captcha
 -- ----------------------------
-INSERT INTO `captcha` VALUES ('888888888888', '982709437@qq.com', '602232939@qq.com', 'test2', 'test2', '1', null, '2020-06-19 11:24:11');
-INSERT INTO `captcha` VALUES ('9999999999', '982709437@qq.com', '602232939@qq.com', 'test3', 'test3', '0', null, null);
+INSERT INTO `captcha` VALUES ('05cb6384-2825-4f22-9d45-8d30d3ecc67c', 'soniachoo.zhu@gmail.com', 'random-nucm@wangpanhuiyuan.com', 'another test', 'hello你好カレンダー', null, null, null, '2020-06-20 22:55:56', '2020-06-20 16:03:02');
+INSERT INTO `captcha` VALUES ('05cb6384-2825-4f22-9d45-8d30d3ecc67d', 'soniachoo.zhu@gmail.com', 'nucm68@wangpanhuiyuan.com', 'another test', 'hello000你好カレンダー', null, null, '1', '2020-06-22 12:45:47', '2020-06-22 12:13:02');
+INSERT INTO `captcha` VALUES ('05cb6384-2825-4f22-9d45-8d30d3ecc67de', 'soniachoo.zhu@gmail.com', 'nucm68@wangpanhuiyuan.com', 'another test', 'hello999你好カレンダー', null, null, null, '2020-06-22 13:19:43', '2020-06-22 12:13:02');
+INSERT INTO `captcha` VALUES ('05cb6384-2825-4f22-9d45-8d30d3ecc67df', 'soniachoo.zhu@gmail.com', 'nucm68@wangpanhuiyuan.com', 'another test', 'hello888你好カレンダー', null, null, '1', '2020-06-22 13:19:47', '2020-06-22 12:13:02');
+INSERT INTO `captcha` VALUES ('05cb6384-2825-4f22-9d45-8d30d3ecc67dfg', 'soniachoo.zhu@gmail.com', 'nucm68@wangpanhuiyuan.com', 'another test', 'hello777你好カレンダー', null, null, null, '2020-06-22 13:19:50', '2020-06-22 12:13:02');
+INSERT INTO `captcha` VALUES ('05cb6384-2825-4f22-9d45-8d30d3ecc67dfh', 'soniachoo.zhu@gmail.com', 'random-nucm@wangpanhuiyuan.com', 'another test', 'hello666你好カレンダー', null, null, null, '2020-06-22 13:19:54', '2020-06-22 12:13:02');
+INSERT INTO `captcha` VALUES ('445fa954-865b-41da-a72d-a94a90298f29', 'soniachoo.zhu@gmail.com', 'random-nucm@wangpanhuiyuan.com', 'another test', 'hello你好カレンダー', null, null, null, '2020-06-20 22:56:41', '2020-06-20 16:03:02');
+INSERT INTO `captcha` VALUES ('4913db88-e138-4189-b133-974aa18da839', 'soniachoo.zhu@gmail.com', 'random-nucm@wangpanhuiyuan.com', 'another test', 'hello你好カレンダー', null, null, null, '2020-06-20 22:58:00', '2020-06-20 16:03:02');
 
 -- ----------------------------
 -- Table structure for invitation
@@ -71,3 +84,5 @@ CREATE TABLE `invitation` (
 -- ----------------------------
 -- Records of invitation
 -- ----------------------------
+INSERT INTO `invitation` VALUES ('6666', '123456', '3', 'nucm68@wangpanhuiyuan.com', '2020-06-21 15:28:48', '8', '2020-06-22 13:02:41');
+INSERT INTO `invitation` VALUES ('8888', '654321', '5', '', null, null, null);

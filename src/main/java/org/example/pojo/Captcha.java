@@ -31,7 +31,12 @@ public class Captcha implements Serializable {
     @JSONField(name="text")
     private String captchaContent;
 
-    private Integer captchaRead;
+    private String captchaCode;
+
+    @JSONField(name="html")
+    private String captchaHtml;
+
+    private Integer captchaRead;//1表示已经读
 
     @JSONField(name="date",format="E, dd MMM yyyy HH:mm:ss Z")
     private Date captchaSendTime;

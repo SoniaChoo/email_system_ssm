@@ -29,13 +29,12 @@
     <div class="site-wrapper-inner">
         <div class="cover-container">
             <div class="inner cover">
-                <h1 class="cover-heading">账号密码</h1>
-                <p class="lead">账号: test@vip.com</p>
-                <p class="lead">密码: password123</p>
+                <h1 class="cover-heading">使用规则</h1>
+                <h3 class="cover-heading">请先前往APP或网页登录,不登录点击无效</h3>
                 <p class="lead">请先前往APP登录, 如果登录需要验证码</p>
                 <p class="lead">请选择邮箱验证, 然后点击下方按钮获取验证码</p>
                 <p class="lead">
-                    <a href="#" class="btn btn-lg btn-default" onclick="yanzhengma()">获取验证码</a>
+                    <a class="btn btn-lg btn-default" onclick="yanzhengma()">获取验证码</a>
                 </p>
             </div>
         </div>
@@ -54,6 +53,16 @@
 
 <script>
     function yanzhengma(){
+        $.ajax({
+            url:"./invitation/searchCaptcha",
+            data:{
+                "invitationCode":$("#invitationCode").val(),
+                "captchaTo":
+            },
+            success:function (captchaData) {
+                alert(captchaData);
+            }
+        })
         alert("验证码为998877")
     }
 </script>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<title>HTML注册登录页面模板</title>
+<link rel="stylesheet" href="css/style.css">
+
+    <script src="./statics/jquery-3.5.1.js"></script>
+    <script>
+        function parseUrl(url){
+            if(url.indexOf("?") == -1) {
+                return {};
+            }
+            var query = url.split("?")[1];
+            var queryArr = query.split("&");
+            var obj = {};
+            queryArr.forEach(function(item){
+                var key = item.split("=")[0];
+                var value = item.split("=")[1];
+                obj[key] = decodeURIComponent(value);
+            });
+            return obj;
+        }
+
+
+        var urlMsg = parseUrl(window.location.search);
+        var html = "<div>"+urlMsg.invitationCode+"</div>"
+            +"<div>"+urlMsg.captchaTo+"</div>"
+        $("#myaccount").html(html)
+
+        function getCaptchaCode() {
+            $.ajax({
+                url:"./invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
+                success:function (captchaData) {
+                    console.log(captchaData);
+                    alert(captchaData);
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <div class="content"style="text-align:center; line-height: normal" >
+        <div id="mycontent" style="border: #8fa1c7; height: 200px; width: 200px">
+            <span id="myaccount">账号:</span>
+        </div>
+        <div class="f">
+            <p class="forgot-pass"><a href="javascript:">必须在百度云点击获取验证码</a></p>
+            <p class="forgot-pass"><a href="javascript:">再点击下方按钮</a></p>
+            <button type="button" class="submit" onclick="getCaptchaCode()">获取验证码</button>
+        </div>
+
+    </div>
+
+    <script src="js/script.js"></script>
+	
+	<div style="text-align:center;">
+<p>还没获得邮箱账号信息?：<a href="login.html" target="_blank">邀请码验证</a></p>
+</div>
+</body>
+
+</html>
