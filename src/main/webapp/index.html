@@ -1,64 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
+<html lang="zh-cn">
 <head>
-<meta charset="utf-8">
-<title>HTML注册登录页面模板</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="./css/ie10.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./css/signin.css" rel="stylesheet">
 
     <script src="./statics/jquery-3.5.1.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script>
-        function parseUrl(url){
-            if(url.indexOf("?") == -1) {
-                return {};
-            }
-            var query = url.split("?")[1];
-            var queryArr = query.split("&");
-            var obj = {};
-            queryArr.forEach(function(item){
-                var key = item.split("=")[0];
-                var value = item.split("=")[1];
-                obj[key] = decodeURIComponent(value);
-            });
-            return obj;
-        }
-
-
-        var urlMsg = parseUrl(window.location.search);
-        var html = "<div>"+urlMsg.invitationCode+"</div>"
-            +"<div>"+urlMsg.captchaTo+"</div>"
-        $("#myaccount").html(html)
-
-        function getCaptchaCode() {
+        function validate() {
             $.ajax({
-                url:"./invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
-                success:function (captchaData) {
-                    console.log(captchaData);
-                    alert(captchaData);
+                url:"./invitation/checkInvitation",
+                data:{"invitationCode":$("#invitationCode").val()},
+                success:function (rdata) {
+                    var html = "";
+                    if (rdata.code === -1) {
+                        html = "<div>"+"邀请码不能为空"+"</div>"
+                        $("#myaccountInfo").html(html)
+                    }else if(rdata.code===1){
+                        html = "<div>"+"邀请码不正确"+"</div>";
+                        $("#myaccountInfo").html(html)
+                    }else if(rdata.code===2){
+                        html = "<div>"+"邀请码已过期,请重新购买"+"</div>";
+                        $("#myaccountInfo").html(html)
+                    }else{
+                        html="<div id='myaccount'>" +"账号:" +rdata.data.accountEmail+"</div>"
+                            +"<div id='mypassword'>" +"密码:" +rdata.data.accountPassword+"</div>";
+                        $("#myaccountInfo").html(html)
+                        document.location.href="/home.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail+"&mypwd="+rdata.data.accountPassword;
+                    }
                 }
             })
         }
     </script>
 </head>
-
 <body>
-    <div class="content"style="text-align:center; line-height: normal" >
-        <div id="mycontent" style="border: #8fa1c7; height: 200px; width: 200px">
-            <span id="myaccount">账号:</span>
-        </div>
-        <div class="f">
-            <p class="forgot-pass"><a href="javascript:">必须在百度云点击获取验证码</a></p>
-            <p class="forgot-pass"><a href="javascript:">再点击下方按钮</a></p>
-            <button type="button" class="submit" onclick="getCaptchaCode()">获取验证码</button>
-        </div>
 
+
+
+<div>
+    <div class="container">
+        <form name="myForm" >
+            <div class="form-group">
+                <label>邀请码</label>
+                <input name="invitationCode" type="text" class="form-control" id="invitationCode" placeholder="请输入您的邀请码"  required="required">
+            </div>
+            <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" style="background-color: #398439" onclick="validate()" >提交</button>
+        </form>
     </div>
-
-    <script src="js/script.js"></script>
-	
-	<div style="text-align:center;">
-<p>还没获得邮箱账号信息?：<a href="login.html" target="_blank">邀请码验证</a></p>
 </div>
-</body>
 
+<div id = "mydiv" border></div>
+<!-- 按钮触发模态框 -->
+<!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
+<!--    开始演示模态框-->
+<!--</button>-->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    邀请码校验结果
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div id = "myaccountInfo"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color: #398439">重新输入邀请码
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+</body>
 </html>

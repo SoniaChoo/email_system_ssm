@@ -1,69 +1,68 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>HTML注册登录页面模板</title>
+<link rel="stylesheet" href="css/style.css">
 
-    <title>账号密码</title>
+    <script src="./statics/jquery-3.5.1.js"></script>
 
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="./css/ie10.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="./css/cover.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 
 <body>
-<div class="site-wrapper">
-    <div class="site-wrapper-inner">
-        <div class="cover-container">
-            <div class="inner cover">
-                <h1 class="cover-heading">使用规则</h1>
-                <h3 class="cover-heading">请先前往APP或网页登录,不登录点击无效</h3>
-                <p class="lead">请先前往APP登录, 如果登录需要验证码</p>
-                <p class="lead">请选择邮箱验证, 然后点击下方按钮获取验证码</p>
-                <p class="lead">
-                    <a class="btn btn-lg btn-default" onclick="yanzhengma()">获取验证码</a>
-                </p>
+    <div class="content"style="text-align:center; line-height: normal" >
+        <div id="mycontent" style="border: #8fa1c7; height: 200px; width: 200px"></div>
+        <div class="f">
+            <div id="myaccount">账号:</div>
+            <div id="mypassword">密码:</div>
+            <div>
+                <p class="forgot-pass"><span style="color: #27282a">注意:</span><a href="javascript:">必须先在百度云点击获取验证码</a></p>
+                <p class="forgot-pass"><a href="javascript:">再点击下方按钮</a></p>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="./js/jquery.min.js"><\/script>')</script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="./js/ie10.js"></script>
+            <button type="button" class="submit" onclick="getCaptchaCode()">获取验证码</button>
+        </div>
+
+    </div>
+
+    <script src="js/script.js"></script>
+	
+<!--	<div style="text-align:center;">-->
+<!--<p>还没获得邮箱账号信息?：<a href="login_bak.html" target="_blank">邀请码验证</a></p>-->
+<!--</div>-->
+
+    <script>
+        function parseUrl(url){
+            if(url.indexOf("?") == -1) {
+                return {};
+            }
+            var query = url.split("?")[1];
+            var queryArr = query.split("&");
+            var obj = {};
+            queryArr.forEach(function(item){
+                var key = item.split("=")[0];
+                var value = item.split("=")[1];
+                obj[key] = decodeURIComponent(value);
+            });
+            return obj;
+        }
+
+
+        var urlMsg = parseUrl(window.location.search);
+        document.getElementById("myaccount").innerHTML = "账号:"+urlMsg.captchaTo;
+        document.getElementById("mypassword").innerHTML = "密码:"+urlMsg.mypwd;
+        function getCaptchaCode() {
+            $.ajax({
+                url:"./invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
+                success:function (captchaData) {
+                    console.log(captchaData);
+                    alert(captchaData.data.captchaCode);
+                }           })
+        }
+    </script>
 </body>
 
-<script>
-    function yanzhengma(){
-        $.ajax({
-            url:"./invitation/searchCaptcha",
-            data:{
-                "invitationCode":$("#invitationCode").val(),
-                "captchaTo":
-            },
-            success:function (captchaData) {
-                alert(captchaData);
-            }
-        })
-        alert("验证码为998877")
-    }
-</script>
 </html>

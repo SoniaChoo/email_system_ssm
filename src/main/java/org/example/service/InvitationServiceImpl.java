@@ -76,6 +76,7 @@ public class InvitationServiceImpl implements InvitationService{
     //验证邀请码的有效性,若有效,并返回一个邮箱账号密码
     @Transactional
     public InvitationResult checkInvitation(String invitationCode) {
+        invitationCode = invitationCode.trim();
         String msg = "";
         InvitationResult invitationResult = new InvitationResult();
 
@@ -96,6 +97,10 @@ public class InvitationServiceImpl implements InvitationService{
             invitationResult.setCode(WRONG);
             invitationResult.setMsg(msg);
             return invitationResult;
+        }
+        if (invitations.size() != 1){
+            // logout
+            System.out.println("邀请码有重复. Invitation code duplicate.");
         }
         Invitation invitation = invitations.get(0);
 
@@ -140,7 +145,6 @@ public class InvitationServiceImpl implements InvitationService{
 
             //如果时间超过有效期
             if(deadlineTime<nowTime) {
-
                 //邀请码已经失效,邮箱使用次数-1,然后不要忘记把更新的数据写回数据库
                 Example example = new Example(Account.class);
                 Example.Criteria criteria = example.createCriteria();
@@ -158,7 +162,7 @@ public class InvitationServiceImpl implements InvitationService{
                 account.setAccountUsingCount(account.getAccountUsingCount()-1);
                 accountMapper.updateByPrimaryKey(account);
 
-                //邀请码已经失效,我们要把与邀请码绑定的邮箱解绑,然后不要忘记把更新的数据写回数据库
+                //邀请码已经失效,我们要把与邀请码绑定的邮箱解绑,激活时间不要置为null, 然后不要忘记把更新的数据写回数据库
                 invitation.setInvitationEmail(null);
                 invitationMapper.updateByPrimaryKey(invitation);
 
@@ -193,10 +197,6 @@ public class InvitationServiceImpl implements InvitationService{
 
     @Transactional
     public CaptchaResult searchCaptcha(String invitationCode, String captchaTo) {
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println(invitationCode);
-        System.out.println(captchaTo);
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~");
         CaptchaResult captchaResult = new CaptchaResult();
         InvitationResult invitationResult = checkInvitation(invitationCode);
         //1代表邀请码不正确Wrong,2代表邀请码失效Expired
