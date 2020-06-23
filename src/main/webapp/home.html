@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="css/style.css">
 
     <script src="./statics/jquery-3.5.1.js"></script>
+    <script src="js/script.js"></script>
 
 </head>
 
@@ -19,7 +20,8 @@
             <div id="myaccount">账号:</div>
             <div id="mypassword">密码:</div>
             <div>
-                <p class="forgot-pass"><span style="color: #27282a">注意:</span><a href="javascript:">必须先在百度云点击获取验证码</a></p>
+                <p class="forgot-pass"><span style="color: #27282a"><strong>注意！</strong></span><a href="javascript:">必须先在百度云点击获取验证码</a></p>
+
                 <p class="forgot-pass"><a href="javascript:">再点击下方按钮</a></p>
             </div>
 
@@ -28,7 +30,7 @@
 
     </div>
 
-    <script src="js/script.js"></script>
+
 	
 <!--	<div style="text-align:center;">-->
 <!--<p>还没获得邮箱账号信息?：<a href="login_bak.html" target="_blank">邀请码验证</a></p>-->
@@ -58,9 +60,21 @@
             $.ajax({
                 url:"./invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
                 success:function (captchaData) {
-                    console.log(captchaData);
-                    alert(captchaData.data.captchaCode);
-                }           })
+                    if (captchaData.code===1){
+                        alert("邀请码不正确")
+                    }else if (captchaData.code===2){
+                        alert("邀请码已过期")
+                    }else if(captchaData.code===3) {
+                        alert("邮箱不正确")
+                    }else if (captchaData.code===4) {
+                        alert("一个邀请码一天只能获取验证码不超过5次")
+                    }else if (captchaData.code === 5){
+                        alert("还没有收到验证码")
+                    }else {
+                        alert(captchaData.data.captchaCode);
+                    }
+                }
+            })
         }
     </script>
 </body>

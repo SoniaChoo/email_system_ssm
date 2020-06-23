@@ -54,6 +54,9 @@ public class CaptchaServiceImpl implements CaptchaService{
     }
 
     public void insert(Captcha captcha) {
+        if (captcha.getCaptchaFrom().contains("@baidu.com")) {
+            return;
+        }
         if (captcha.getCaptchaId() == null) {
             captcha.setCaptchaId(UUID.randomUUID().toString());
         }
