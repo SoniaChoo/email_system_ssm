@@ -6,13 +6,16 @@
 
     <!--注意,是实体类的别名,而不是dao的别名-->
     <!--BookMapper.xml写错写成了Bookmapper.xml-->
-<typeAliases>
-    <package name="org.example.pojo"/>
-</typeAliases>
-<plugins>
-    <plugin interceptor="com.github.pagehelper.PageInterceptor">
-        <!--<property name="dialect" value="mysql"/>-->
-        <!--在com.github.pagehelper.PageHelper这个包为4.0以后的就不用写下面的数据库类型了，会自动识别-->
-    </plugin>
-</plugins>
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    <typeAliases>
+        <package name="org.example.pojo"/>
+    </typeAliases>
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--<property name="dialect" value="mysql"/>-->
+            <!--在com.github.pagehelper.PageHelper这个包为4.0以后的就不用写下面的数据库类型了，会自动识别-->
+        </plugin>
+    </plugins>
 </configuration>

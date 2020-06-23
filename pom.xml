@@ -124,6 +124,12 @@
             <version>5.1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
         <!--jdk JDK在8之前的版本，对日期时间的处理相当麻烦，
         有些方法设计非常反人类。而Joda-Time使用起来不仅方便，
         而且可读性强。虽然JDK 8引用了新的时间处理类，而且参与设计的人也正是Joda-Time的作者，
