@@ -249,6 +249,7 @@ public class InvitationServiceImpl implements InvitationService{
         Example example1 = new Example(Captcha.class);
         Example.Criteria criteria1 = example1.createCriteria();
         criteria1.andEqualTo("captchaTo",captchaTo);
+        criteria1.andLike("captchaFrom","%"+"@baidu.com"+"%");
 //            criteria1.andGreaterThan("captchaReceiveTime",new Date().getTime()-1 * 60 * 60 * 1000);
        // criteria1.andEqualTo("captchaRead",0);
         example1.orderBy("captchaReceiveTime").desc();
