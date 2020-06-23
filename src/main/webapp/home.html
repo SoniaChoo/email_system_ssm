@@ -25,7 +25,7 @@
                 <p class="forgot-pass"><a href="javascript:">再点击下方按钮</a></p>
             </div>
 
-            <button type="button" class="submit" onclick="getCaptchaCode()">获取验证码</button>
+            <button type="button" id="btn" class="submit" onclick="getCaptchaCode()">获取验证码</button>
         </div>
 
     </div>
@@ -35,6 +35,61 @@
 <!--	<div style="text-align:center;">-->
 <!--<p>还没获得邮箱账号信息?：<a href="login_bak.html" target="_blank">邀请码验证</a></p>-->
 <!--</div>-->
+
+    <script>
+        $('#btn').click(function(){
+            $('#btn').text('倒计时30s');
+            $('#btn').prop('disabled',true);
+            // 设置 cookie 值
+            $(document)[0].cookie = 'ckey='+30;
+            console.log('cookie 设置完毕');
+
+        });
+        function setStyle(){
+            var cval = getCookie();
+            if(cval>1){
+                $('#btn').text('倒计时'+cval+'s');
+                $('#btn').prop('disabled',true);
+                console.log('hahah')
+            }else{
+                $('#btn').text('获取验证码');
+                $('#btn').prop('disabled',false);
+            }
+        }
+        setStyle();
+
+        id = setInterval(function(){
+            setCookie();
+            console.log(1);
+        },1000)
+
+        function setCookie(){
+            var cval = getCookie();
+            if(cval>1){
+                $(document)[0].cookie = 'ckey='+(cval-1);
+                $('#btn').text('倒计时'+(cval-1)+'s');
+                $('#btn').prop('disabled',true);
+            }else if(cval==1){
+                $('#btn').text('获取验证码');
+                $('#btn').prop('disabled',false);
+                $(document)[0].cookie = 'ckey='+0;
+                // clearInterval(id);
+            }
+        }
+        function getCookie(){
+            // 获取全部的 cookie
+            var cookie = $(document)[0].cookie;
+            // 获取 cookie 项  (数组)
+            var citem = cookie.split(';');
+            // 过滤数组  获得 键为 ckey 的项
+            var ckey = citem.filter(function(item){
+                return item.split('=')[0].trim()=='ckey';
+            });
+            // 获得 时间  cval
+            cval = ckey[0].split('=')[1];
+            return cval;
+        }
+    </script>
 
     <script>
         function parseUrl(url){
