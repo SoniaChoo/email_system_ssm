@@ -7,6 +7,7 @@ public class InvitationResult {
     public static final int RIGHT = 0;
     public static final int WRONG = 1;
     public static final int EXPIRED = 2;
+    public static final int TOTALCOUNT = 5;
     private Integer code;//0代表邀请码正确并且有效,1代表邀请码不正确,2代表邀请码失效,-1代表邀请码为空
     private String msg; //如果发生错误,代表错误的信息
     private Map<String,String> data; //代表返回的结果

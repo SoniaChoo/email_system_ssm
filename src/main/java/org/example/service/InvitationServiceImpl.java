@@ -187,9 +187,16 @@ public class InvitationServiceImpl implements InvitationService{
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("accountEmail",accountEmail);
                 map.put("accountPassword",accountPassword);
+                //把到期时间带上
                 DateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
                 Date date = new Date(deadlineTime);
                 map.put("invitationDeadlinetime",formatter.format(date));
+                //把当天获取验证码剩余次数带上
+//                int remainCount = TOTALCOUNT - invitation.getInvitationCaptchaCount();
+//                if(remainCount < 0) {
+//                    remainCount = 0;
+//                }
+//                map.put("remainCount",remainCount+"");
                 invitationResult.setData(map);
                 return invitationResult;
             }
@@ -271,9 +278,16 @@ public class InvitationServiceImpl implements InvitationService{
         captcha.setCaptchaRead(1);
         captchaMapper.updateByPrimaryKey(captcha);
 
+        //成功的时候添加数据
         Map<String, String> map = new HashMap<String, String>();
-
         map.put("captchaCode",captcha.getCaptchaCode());
+
+        /*验证码获取次数*/
+        int remainCount = TOTALCOUNT - invitation.getInvitationCaptchaCount();
+        if(remainCount < 0) {
+            remainCount = 0;
+        }
+        map.put("remainCount",remainCount+"");
         captchaResult.setData(map);
         return captchaResult;
     }
