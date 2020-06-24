@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -140,9 +142,8 @@ public class InvitationServiceImpl implements InvitationService{
             //该账户已经有激活时间,需要验证一下激活时间是否还在有效期内
             Date invitationActivateTime = invitation.getInvitationActivateTime();
             Integer lifetime = invitation.getInvitationLifetime();
-            long deadlineTime = invitationActivateTime.getTime()+lifetime * 24 * 60 * 60 * 1000;
+            long deadlineTime = invitationActivateTime.getTime()+lifetime * 24L * 60L * 60L * 1000L;
             long nowTime = new Date().getTime();
-
             //如果时间超过有效期
             if(deadlineTime<nowTime) {
                 //邀请码已经失效,邮箱使用次数-1,然后不要忘记把更新的数据写回数据库
@@ -186,6 +187,9 @@ public class InvitationServiceImpl implements InvitationService{
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("accountEmail",accountEmail);
                 map.put("accountPassword",accountPassword);
+                DateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
+                Date date = new Date(deadlineTime);
+                map.put("invitationDeadlinetime",formatter.format(date));
                 invitationResult.setData(map);
                 return invitationResult;
             }

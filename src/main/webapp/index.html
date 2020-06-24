@@ -73,6 +73,7 @@
             success:function (rdata) {
                 var html = "";
                 if(rdata.code===1){
+                    console.log(rdata);
                     html = "<div>"+"邀请码不正确"+"</div>";
                     $("#myaccountInfo").html(html)
                 }else if(rdata.code===2){
@@ -83,7 +84,7 @@
                    /* html="<div id='myaccount'>" +"账号:" +rdata.data.accountEmail+"</div>"
                         +"<div id='mypassword'>" +"密码:" +rdata.data.accountPassword+"</div>";
                     $("#myaccountInfo").html(html)*/
-                    document.location.href="/home.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail+"&mypwd="+rdata.data.accountPassword;
+                    document.location.href="/home.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail+"&mypwd="+rdata.data.accountPassword+"&invitationDeadlinetime="+rdata.data.invitationDeadlinetime;
                 }
             }
         })

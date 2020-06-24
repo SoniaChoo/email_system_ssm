@@ -19,7 +19,9 @@
         <div class="f">
             <div id="myaccount">账号:</div>
             <div id="mypassword">密码:</div>
+
             <div>
+                <p class="forgot-pass" id="mydeadlinetime"><span style="color: #27282a"><strong>账号到期时间</strong></span><a href="javascript:"></a></p>
                 <p class="forgot-pass"><span style="color: #27282a"><strong>注意！</strong></span><a href="javascript:">必须先用账号密码登录后,点击获取验证码</a></p>
 
                 <p class="forgot-pass"><a href="javascript:">再点击下方按钮</a></p>
@@ -37,58 +39,27 @@
 <!--</div>-->
 
     <script>
-        $('#btn').click(function(){
-            $('#btn').text('倒计时30s');
-            $('#btn').prop('disabled',true);
-            // 设置 cookie 值
-            $(document)[0].cookie = 'ckey='+30;
-            console.log('cookie 设置完毕');
-
+        $('#btn').click(function() {
+            let count = 30;
+            const countDown = setInterval(() => {
+                if (count === 0) {
+                    $('#btn').text('获取验证码').removeAttr('disabled');
+                    $('#btn').css({
+                        background: '#ff9400',
+                        color: '#fff',
+                    });
+                    clearInterval(countDown);
+                } else {
+                    $('#btn').attr('disabled', true);
+                    $('#btn').css({
+                        background: '#d8d8d8',
+                        color: '#707070',
+                    });
+                    $('#btn').text(count + '秒后可重新获取');
+                }
+                count--;
+            }, 1000);
         });
-        function setStyle(){
-            var cval = getCookie();
-            if(cval>1){
-                $('#btn').text('倒计时'+cval+'s');
-                $('#btn').prop('disabled',true);
-                console.log('hahah')
-            }else{
-                $('#btn').text('获取验证码');
-                $('#btn').prop('disabled',false);
-            }
-        }
-        setStyle();
-
-        id = setInterval(function(){
-            setCookie();
-            console.log(1);
-        },1000)
-
-        function setCookie(){
-            var cval = getCookie();
-            if(cval>1){
-                $(document)[0].cookie = 'ckey='+(cval-1);
-                $('#btn').text('倒计时'+(cval-1)+'s');
-                $('#btn').prop('disabled',true);
-            }else if(cval==1){
-                $('#btn').text('获取验证码');
-                $('#btn').prop('disabled',false);
-                $(document)[0].cookie = 'ckey='+0;
-                // clearInterval(id);
-            }
-        }
-        function getCookie(){
-            // 获取全部的 cookie
-            var cookie = $(document)[0].cookie;
-            // 获取 cookie 项  (数组)
-            var citem = cookie.split(';');
-            // 过滤数组  获得 键为 ckey 的项
-            var ckey = citem.filter(function(item){
-                return item.split('=')[0].trim()=='ckey';
-            });
-            // 获得 时间  cval
-            cval = ckey[0].split('=')[1];
-            return cval;
-        }
     </script>
 
     <script>
@@ -111,6 +82,7 @@
         var urlMsg = parseUrl(window.location.search);
         document.getElementById("myaccount").innerHTML = "账号:"+urlMsg.captchaTo;
         document.getElementById("mypassword").innerHTML = "密码:"+urlMsg.mypwd;
+        document.getElementById("mydeadlinetime").innerHTML = "到期时间:"+urlMsg.invitationDeadlinetime;
         function getCaptchaCode() {
             $.ajax({
                 url:"./invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
