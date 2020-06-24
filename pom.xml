@@ -142,6 +142,7 @@
     </dependencies>
 
     <build>
+        <finalName>huiyuan</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>

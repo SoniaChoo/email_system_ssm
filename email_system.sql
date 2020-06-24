@@ -47,7 +47,7 @@ CREATE TABLE `captcha` (
   `captcha_subject` varchar(255) DEFAULT NULL COMMENT '邮件主题',
   `captcha_content` text COMMENT '邮件内容',
   `captcha_code` varchar(255) DEFAULT NULL,
-  `captcha_html` varchar(255) DEFAULT NULL,
+  `captcha_html` text,
   `captcha_read` int(11) DEFAULT NULL COMMENT '是否已读',
   `captcha_receive_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '收件时间',
   `captcha_send_time` datetime DEFAULT NULL,

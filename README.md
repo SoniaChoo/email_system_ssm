@@ -8,7 +8,8 @@ sudo mysql_secure_installation # 数据库初始化
 
 sudo mysql -u root -p # 用刚刚设置的密码登陆进入数据库
     CREATE USER 'YOUR_USERNAME'@'localhost' IDENTIFIED BY 'YOUR_PASSWORD'; # 在数据库中新建一个用户
-    GRANT ALL PRIVILEGES ON *.* TO 'YOUR_USERNAME'@'%' IDENTIFIED BY 'YOUR_PASSWORD' WITH GRANT OPTION; # 设置所有权限+允许远程访问
+    GRANT ALL PRIVILEGES ON *.* TO 'YOUR_USERNAME'@'localhost'; # 设置用户拥有所有本地权限
+    GRANT ALL PRIVILEGES ON *.* TO 'YOUR_USERNAME'@'%' IDENTIFIED BY 'YOUR_PASSWORD' WITH GRANT OPTION; # 设置用户远程访问时拥有所有权限
     FLUSH PRIVILEGES; # 更新权限
     exit; # 退出数据库
 
