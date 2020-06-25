@@ -9,8 +9,10 @@ public class CaptchaResult {
     public static final int BINDING = 3;
     public static final int EXCEEDING = 4;
     public static final int NOTRECEIVE = 5;
+    public static final int OUTDATED = 6;
     private Integer code;//0代表邀请码正确并且有效且去输入的邮箱一致,得到验证码,1代表邀请码不正确Wrong,2代表邀请码失效Expired,
-    // 3代表邀请码绑定的邮箱和输入的邮箱不一致,4代表邀请码当天获取次数超额,5.0代表邀请码正确并且有效且去输入的邮箱一致,还没有收到验证码
+    // 3代表邀请码绑定的邮箱和输入的邮箱不一致,4代表邀请码当天获取次数超额,5代表邀请码正确并且有效且去输入的邮箱一致,还没有收到验证码,
+    // 6代表验证码已过期
     private String msg; //如果发生错误,代表错误的信息
     private Map<String,String> data; //代表返回的结果
 

@@ -79,11 +79,11 @@ public class InvitationServiceImpl implements InvitationService{
     @Transactional
     public InvitationResult checkInvitation(String invitationCode) {
         invitationCode = invitationCode.trim();
-        String msg = "";
+        String msg;
         InvitationResult invitationResult = new InvitationResult();
 
         //表单数据不能为空
-        if (invitationCode == null||"".equals(invitationCode) ) {
+        if ("".equals(invitationCode) ) {
             msg = "邀请码不能为空";
             invitationResult.setCode(NOVALUE);
             invitationResult.setMsg(msg);
@@ -108,7 +108,8 @@ public class InvitationServiceImpl implements InvitationService{
 
         //如果该邀请码没有激活时间,说明是第一次使用,我们为他设置激活时间,匹配邮箱
         if (invitation.getInvitationActivateTime() == null) {
-            invitation.setInvitationActivateTime(new Date());
+            Date nowDate = new Date();
+            invitation.setInvitationActivateTime(nowDate);
 
             /*选择一个使用人数最少的邮箱,绑定邮箱*/
             Example example = new Example(Account.class);
@@ -135,10 +136,15 @@ public class InvitationServiceImpl implements InvitationService{
             Map<String, String> map = new HashMap<String, String>();
             map.put("accountEmail",accountEmail);
             map.put("accountPassword",accountPassword);
+            //把到期时间带上
+            DateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
+            Integer lifetime = invitation.getInvitationLifetime();
+            long deadlineTime = nowDate.getTime()+lifetime * 24L * 60L * 60L * 1000L;
+            Date date = new Date(deadlineTime);
+            map.put("invitationDeadlinetime",formatter.format(date));
             invitationResult.setData(map);
             return invitationResult;
         }else{
-
             //该账户已经有激活时间,需要验证一下激活时间是否还在有效期内
             Date invitationActivateTime = invitation.getInvitationActivateTime();
             Integer lifetime = invitation.getInvitationLifetime();
@@ -239,15 +245,15 @@ public class InvitationServiceImpl implements InvitationService{
 
         //如果时间相较于前一天第一次验证时间过了一天,将第一次验证时间更新为现在的时间,验证次数设为0;
         //如果是第一次请求验证码,需要更新invitation表中验证时间和验证次数
-        if (invitation.getInvitationFirstCaptchaTime()==null || invitation.getInvitationFirstCaptchaTime().getTime()+1 * 24 * 60 * 60 * 1000< new Date().getTime()) {
+        if (invitation.getInvitationFirstCaptchaTime()==null || invitation.getInvitationFirstCaptchaTime().getTime()+24 * 60 * 60 * 1000< new Date().getTime()) {
             invitation.setInvitationFirstCaptchaTime(new Date());
             invitation.setInvitationCaptchaCount(0);
             invitationMapper.updateByPrimaryKey(invitation);
-        }else {
-            //验证次数加1
-            invitation.setInvitationCaptchaCount(invitation.getInvitationCaptchaCount() + 1);
-            invitationMapper.updateByPrimaryKey(invitation);
         }
+
+        //验证次数加1
+        invitation.setInvitationCaptchaCount(invitation.getInvitationCaptchaCount() + 1);
+        invitationMapper.updateByPrimaryKey(invitation);
 
         //判断在一天之内请求获取验证码次数是否不超过5次
         if (invitation.getInvitationCaptchaCount() > 5) {
@@ -261,8 +267,8 @@ public class InvitationServiceImpl implements InvitationService{
         Example.Criteria criteria1 = example1.createCriteria();
         criteria1.andEqualTo("captchaTo",captchaTo);
         criteria1.andLike("captchaFrom","%"+"@baidu.com"+"%");
-//            criteria1.andGreaterThan("captchaReceiveTime",new Date().getTime()-1 * 60 * 60 * 1000);
-       // criteria1.andEqualTo("captchaRead",0);
+        //criteria1.andGreaterThan("captchaReceiveTime",new Date().getTime()-1 * 60 * 60 * 1000);
+        criteria1.andEqualTo("captchaRead",0);
         example1.orderBy("captchaReceiveTime").desc();
         List<Captcha> captchas = captchaMapper.selectByExample(example1);
 
@@ -277,6 +283,12 @@ public class InvitationServiceImpl implements InvitationService{
         //把验证码表中对应的captchaRead设为已读;
         captcha.setCaptchaRead(1);
         captchaMapper.updateByPrimaryKey(captcha);
+        long oneHourAgo = new Date().getTime()-60 * 60 * 1000;
+        if (captcha.getCaptchaReceiveTime().getTime()<oneHourAgo){
+            captchaResult.setCode(OUTDATED);
+            captchaResult.setMsg("验证码已过期");
+            return captchaResult;
+        }
 
         //成功的时候添加数据
         Map<String, String> map = new HashMap<String, String>();

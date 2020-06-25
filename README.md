@@ -1,5 +1,7 @@
 # email_system_ssm
 
+3. 数据库全部需要 default value, 比如说captcha表read字段.
+
 2. mysql5.7 创建新用户， 设置所有权限，允许远程访问。
 ```shell script
 sudo apt update # 更新依赖包

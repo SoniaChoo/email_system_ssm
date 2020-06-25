@@ -68,7 +68,7 @@
             return false;
         }
         $.ajax({
-            url:"./invitation/checkInvitation",
+            url:"http://localhost:8080/invitation/checkInvitation",
             data:{"invitationCode":$("#invitationCode").val()},
             success:function (rdata) {
                 var html = "";
