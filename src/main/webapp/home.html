@@ -81,7 +81,7 @@
         document.getElementById("mydeadlinetime").innerHTML = "到期时间:"+urlMsg.invitationDeadlinetime;
         function getCaptchaCode() {
             $.ajax({
-                url:"http://localhost:8080/invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
+                url:"./invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
                 success:function (captchaData) {
                     if (captchaData.code===1){
                         alert("邀请码不正确")
