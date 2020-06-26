@@ -61,6 +61,8 @@ public class CaptchaServiceImpl implements CaptchaService{
             captcha.setCaptchaReceiveTime(new Date());
         }
 
+        captcha.setCaptchaRead(0);
+
         Map<String,String> map = JSON.parseObject(captcha.getCaptchaFrom(), Map.class);
         captcha.setCaptchaFrom(map.get("email"));
 

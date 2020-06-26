@@ -2,6 +2,8 @@ package org.example.entity;
 
 import java.util.Map;
 
+import static org.example.entity.InvitationResult.TOTALCOUNT;
+
 public class CaptchaResult {
     public static final int RIGHT = 0;
     public static final int WRONG = 1;
@@ -49,5 +51,14 @@ public class CaptchaResult {
 
     public void setData(Map<String, String> data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "CaptchaResult{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

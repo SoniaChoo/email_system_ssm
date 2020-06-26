@@ -56,6 +56,7 @@ public class AccountServiceImpl implements AccountService{
     }
 
     public void insert(Account account) {
+        account.setAccountUsingCount(0);
         accountMapper.insert(account);
     }
 

@@ -61,6 +61,7 @@ public class InvitationServiceImpl implements InvitationService{
     }
 
     public void insert(Invitation invitation) {
+        invitation.setInvitationCaptchaCount(0);
             invitationMapper.insert(invitation);
     }
 
@@ -236,6 +237,15 @@ public class InvitationServiceImpl implements InvitationService{
         }
         Invitation invitation = invitations.get(0);
 
+        /*验证码获取次数*/
+        int remainCount = TOTALCOUNT - invitation.getInvitationCaptchaCount();
+        if(remainCount < 0) {
+            remainCount = 0;
+        }
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("remainCount",remainCount+"");
+        captchaResult.setData(map);
+
         //验证输入的邮箱是否与邀请码绑定的邮箱一致
         if (!(captchaTo.equals(invitation.getInvitationEmail()))) {
             captchaResult.setCode(BINDING);
@@ -252,8 +262,8 @@ public class InvitationServiceImpl implements InvitationService{
         }
 
         //验证次数加1
-        invitation.setInvitationCaptchaCount(invitation.getInvitationCaptchaCount() + 1);
-        invitationMapper.updateByPrimaryKey(invitation);
+//        invitation.setInvitationCaptchaCount(invitation.getInvitationCaptchaCount() + 1);
+//        invitationMapper.updateByPrimaryKey(invitation);
 
         //判断在一天之内请求获取验证码次数是否不超过5次
         if (invitation.getInvitationCaptchaCount() > 5) {
@@ -290,17 +300,22 @@ public class InvitationServiceImpl implements InvitationService{
             return captchaResult;
         }
 
-        //成功的时候添加数据
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("captchaCode",captcha.getCaptchaCode());
 
-        /*验证码获取次数*/
-        int remainCount = TOTALCOUNT - invitation.getInvitationCaptchaCount();
+        //成功的时候添加数据
+        Map<String, String> map2 = new HashMap<String, String>();
+        map2.put("captchaCode",captcha.getCaptchaCode());
+
+        //成功的时候,验证次数再加1
+        invitation.setInvitationCaptchaCount(invitation.getInvitationCaptchaCount() + 1);
+        invitationMapper.updateByPrimaryKey(invitation);
+
+        /*验证码剩余可获取次数*/
+         remainCount--;
         if(remainCount < 0) {
             remainCount = 0;
         }
-        map.put("remainCount",remainCount+"");
-        captchaResult.setData(map);
+        map2.put("remainCount",remainCount+"");
+        captchaResult.setData(map2);
         return captchaResult;
     }
 
