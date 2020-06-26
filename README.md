@@ -15,6 +15,8 @@ sudo mysql -u root -p # 用刚刚设置的密码登陆进入数据库
     FLUSH PRIVILEGES; # 更新权限
     exit; # 退出数据库
 
+#除了允许 mysql 用户远程连接, 还需要修改 mysql 设置文件, /etc/mysql/mysql.conf.d/mysqld.cnf 将其中的 bind-address=127.0.0.1 注释掉.
+
 
 
 ```
