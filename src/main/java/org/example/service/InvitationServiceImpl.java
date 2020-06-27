@@ -2,7 +2,7 @@ package org.example.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.example.Util;
+import org.apache.log4j.Logger;
 import org.example.dao.AccountMapper;
 import org.example.dao.CaptchaMapper;
 import org.example.dao.InvitationMapper;
@@ -24,15 +24,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.example.entity.CaptchaResult.*;
-import static org.example.entity.InvitationResult.*;
-import static org.example.entity.InvitationResult.EXPIRED;
-import static org.example.entity.InvitationResult.WRONG;
+import static org.example.entity.Result.*;
 
 @Service
-public class InvitationServiceImpl implements InvitationService{
+public class InvitationServiceImpl implements InvitationService {
+    String invitationId = "invitationId";
+    String invitationCode = "invitationCode";
+    String invitationLifetime = "invitationLifetime";
+    String invitationEmail = "invitationEmail";
+    String invitationCaptchaCount = "invitationCaptchaCount";
+
+    static Logger logger = Logger.getLogger(AccountServiceImpl.class);
+
     @Autowired
     private InvitationMapper invitationMapper;
+    @Autowired
+    private AccountMapper accountMapper;
+    @Autowired
+    private CaptchaMapper captchaMapper;
+
 
     public List<Invitation> selectAll() {
         return invitationMapper.selectAll();
@@ -42,27 +52,29 @@ public class InvitationServiceImpl implements InvitationService{
         return invitationMapper.selectByPrimaryKey(id);
     }
 
-    public PageResult<Invitation> selectPage(int page, int size) {
-        PageHelper.startPage(page,size);
-        Page<Invitation> invitations = (Page<Invitation>) invitationMapper.selectAll();
-        return new PageResult<Invitation>(invitations.getResult(),invitations.getTotal());
-    }
-
-    public List<Invitation> selectList(Map<String, Object> searchmap) {
-        Example example = createExample(searchmap);
+    public List<Invitation> selectList(Map<String, Object> searchMap) {
+        Example example = createExample(searchMap);
         return invitationMapper.selectByExample(example);
     }
 
-    public PageResult<Invitation> selectPage(Map<String, Object> searchmap, int page, int size) {
-        PageHelper.startPage(page,size);
-        Example example = createExample(searchmap);
+    public PageResult<Invitation> selectPage(int page, int size) {
+        PageHelper.startPage(page, size);
+        Page<Invitation> invitations = (Page<Invitation>) invitationMapper.selectAll();
+        return new PageResult<Invitation>(invitations.getResult(), invitations.getTotal());
+    }
+
+    public PageResult<Invitation> selectPage(Map<String, Object> searchMap, int page, int size) {
+        PageHelper.startPage(page, size);
+        Example example = createExample(searchMap);
         Page<Invitation> invitations = (Page<Invitation>) invitationMapper.selectByExample(example);
-        return new PageResult<Invitation>(invitations.getResult(),invitations.getTotal());
+        return new PageResult<Invitation>(invitations.getResult(), invitations.getTotal());
     }
 
     public void insert(Invitation invitation) {
-        invitation.setInvitationCaptchaCount(0);
-            invitationMapper.insert(invitation);
+        if (invitation.getInvitationCaptchaCount() == null) {
+            invitation.setInvitationCaptchaCount(0);
+        }
+        invitationMapper.insert(invitation);
     }
 
     public void update(Invitation invitation) {
@@ -73,145 +85,120 @@ public class InvitationServiceImpl implements InvitationService{
             invitationMapper.deleteByPrimaryKey(id);
     }
 
-    @Autowired
-    private AccountMapper accountMapper;
-
     //验证邀请码的有效性,若有效,并返回一个邮箱账号密码
     @Transactional
     public InvitationResult checkInvitation(String invitationCode) {
         invitationCode = invitationCode.trim();
-        String msg;
         InvitationResult invitationResult = new InvitationResult();
+        Invitation invitation;
+        Account account;
+        long deadlineTime;
+        Date nowDate = new Date(); // 系统当前时间
 
         //表单数据不能为空
-        if ("".equals(invitationCode) ) {
-            msg = "邀请码不能为空";
+        if ("".equals(invitationCode)) {
             invitationResult.setCode(NOVALUE);
-            invitationResult.setMsg(msg);
+            invitationResult.setMsg("邀请码不能为空");
             return invitationResult;
         }
-        Map<String,Object> searchmap = new HashMap<String, Object>();
-        searchmap.put("invitationCode",invitationCode);
-        List<Invitation> invitations = invitationMapper.selectByExample(createExample(searchmap));
+
+        Map<String, Object> searchMap = new HashMap<String, Object>();
+        searchMap.put(this.invitationCode, invitationCode);
+        List<Invitation> invitations = invitationMapper.selectByExample(createExample(searchMap));
 
         //如果根据该邀请码在数据库中匹配不到,那么返回邀请码码不正确
-        if(invitations.size() == 0) {
-            msg = "邀请码不正确";
+        if (invitations.size() == 0) {
             invitationResult.setCode(WRONG);
-            invitationResult.setMsg(msg);
+            invitationResult.setMsg("邀请码不正确");
             return invitationResult;
         }
-        if (invitations.size() != 1){
+        //如果该邀请码在数据库中有重复, 返回错误
+        if (invitations.size() != 1) {
+            invitationResult.setCode(WRONG);
+            invitationResult.setMsg("邀请码不正确");
             // logout
-            System.out.println("邀请码有重复. Invitation code duplicate.");
+            logger.error("invitation code duplicate. 邀请码有重复。invitationCode : " + invitationCode);
+            return invitationResult;
         }
-        Invitation invitation = invitations.get(0);
+        invitation = invitations.get(0);
 
         //如果该邀请码没有激活时间,说明是第一次使用,我们为他设置激活时间,匹配邮箱
         if (invitation.getInvitationActivateTime() == null) {
-            Date nowDate = new Date();
             invitation.setInvitationActivateTime(nowDate);
 
-            /*选择一个使用人数最少的邮箱,绑定邮箱*/
-            Example example = new Example(Account.class);
-            example.orderBy("accountUsingCount").asc();
-            List<Account> accounts = accountMapper.selectByExample(example);
-            if (accounts.size() == 0) {
-                throw new RuntimeException();
-            }
-            Account account = accounts.get(0);
+            /*选择一个使用人数最少的邮箱,绑定邮箱, 更新信息*/
+            account = getAccount(invitation);
             invitation.setInvitationEmail(account.getAccountEmail());
-
-            //记得把更新的数据写回数据库!!!
             invitationMapper.updateByPrimaryKey(invitation);
 
-            //将被选择邮箱的使用次数+1
-            account.setAccountUsingCount(account.getAccountUsingCount()+1);
-
-            //记得把更新的数据写回数据库!!!
-            accountMapper.updateByPrimaryKey(account);
-
-            //返回与该激活码绑定的邮箱账号和密码
-            String accountEmail = account.getAccountEmail();
-            String accountPassword = account.getAccountPassword();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("accountEmail",accountEmail);
-            map.put("accountPassword",accountPassword);
-            //把到期时间带上
-            DateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
             Integer lifetime = invitation.getInvitationLifetime();
-            long deadlineTime = nowDate.getTime()+lifetime * 24L * 60L * 60L * 1000L;
-            Date date = new Date(deadlineTime);
-            map.put("invitationDeadlinetime",formatter.format(date));
-            invitationResult.setData(map);
-            return invitationResult;
-        }else{
+            deadlineTime = nowDate.getTime() + lifetime * 24L * 60L * 60L * 1000L;
+        } else {
             //该账户已经有激活时间,需要验证一下激活时间是否还在有效期内
             Date invitationActivateTime = invitation.getInvitationActivateTime();
             Integer lifetime = invitation.getInvitationLifetime();
-            long deadlineTime = invitationActivateTime.getTime()+lifetime * 24L * 60L * 60L * 1000L;
-            long nowTime = new Date().getTime();
-            //如果时间超过有效期
-            if(deadlineTime<nowTime) {
-                //邀请码已经失效,邮箱使用次数-1,然后不要忘记把更新的数据写回数据库
-                Example example = new Example(Account.class);
-                Example.Criteria criteria = example.createCriteria();
-                criteria.andEqualTo("accountEmail",invitation.getInvitationEmail());
-                List<Account> accounts = accountMapper.selectByExample(example);
-                if (accounts.size()!=1){
+            deadlineTime = invitationActivateTime.getTime() + lifetime * 24L * 60L * 60L * 1000L;
 
-                    //邀请码已经解绑邮箱了,用户仍然去请求
-                    invitationResult.setCode(EXPIRED);
-                    msg="邀请码已过期,请重新购买";
-                    invitationResult.setMsg(msg);
-                    return invitationResult;
-                }
-                Account account = accounts.get(0);
-                account.setAccountUsingCount(account.getAccountUsingCount()-1);
-                accountMapper.updateByPrimaryKey(account);
+            //如果时间超过有效期, 邀请码失效
+            if (deadlineTime < nowDate.getTime()) {
+//                // TODO:过期邀请码解绑邮箱, 使用定时器
+//                //邀请码已经失效,邮箱使用次数-1,然后不要忘记把更新的数据写回数据库
+//                Example example = new Example(Account.class);
+//                Example.Criteria criteria = example.createCriteria();
+//                criteria.andEqualTo(account,invitation.getInvitationEmail());
+//                List<Account> accounts = accountMapper.selectByExample(example);
+//                if (accounts.size()!=1){
+//
+//                    //邀请码已经解绑邮箱了,用户仍然去请求
+//                    invitationResult.setCode(EXPIRED);
+//                    msg="邀请码已过期,请重新购买";
+//                    invitationResult.setMsg(msg);
+//                    return invitationResult;
+//                }
+//                Account account = accounts.get(0);
+//                account.setAccountUsingCount(account.getAccountUsingCount()-1);
+//                accountMapper.updateByPrimaryKey(account);
+//
+//                //邀请码已经失效,我们要把与邀请码绑定的邮箱解绑,激活时间不要置为null, 然后不要忘记把更新的数据写回数据库
+//                invitation.setInvitationEmail(null);
+//                invitationMapper.updateByPrimaryKey(invitation);
 
-                //邀请码已经失效,我们要把与邀请码绑定的邮箱解绑,激活时间不要置为null, 然后不要忘记把更新的数据写回数据库
-                invitation.setInvitationEmail(null);
-                invitationMapper.updateByPrimaryKey(invitation);
-
-                //Q:?邀请码需要在数据库中删除码?
                 invitationResult.setCode(EXPIRED);
-                msg="邀请码已过期,请重新购买";
-                invitationResult.setMsg(msg);
+                invitationResult.setMsg("邀请码已过期,请联系客服重新购买");
                 return invitationResult;
-            }else{
-
+            } else {
+                // 邀请码有效, 检查邮箱绑定
                 //返回与该激活码绑定的邮箱账号和密码,查询account表,获得与该邀请码绑定的账号,密码
+                if (invitation.getInvitationEmail() == null) {
+                    account = getAccount(invitation);
+                    invitation.setInvitationEmail(account.getAccountEmail());
+                    invitationMapper.updateByPrimaryKey(invitation);
+                }
                 Example example = new Example(Account.class);
                 Example.Criteria criteria = example.createCriteria();
-                criteria.andEqualTo("accountEmail",invitation.getInvitationEmail());
+                criteria.andEqualTo("accountEmail", invitation.getInvitationEmail());
                 List<Account> accounts = accountMapper.selectByExample(example);
-                if(accounts.size() == 0){
+                if (accounts.size() == 0) {
+                    logger.error("related account not found. 未找到绑定的邮箱。" +
+                            "invitationCode : " + invitationCode +
+                            ", account : " + invitation.getInvitationEmail());
                     throw new RuntimeException("没有找到与该邀请码绑定的邮箱");
                 }
-                String accountEmail = accounts.get(0).getAccountEmail();
-                String accountPassword = accounts.get(0).getAccountPassword();
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("accountEmail",accountEmail);
-                map.put("accountPassword",accountPassword);
-                //把到期时间带上
-                DateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
-                Date date = new Date(deadlineTime);
-                map.put("invitationDeadlinetime",formatter.format(date));
-                //把当天获取验证码剩余次数带上
-//                int remainCount = TOTALCOUNT - invitation.getInvitationCaptchaCount();
-//                if(remainCount < 0) {
-//                    remainCount = 0;
-//                }
-//                map.put("remainCount",remainCount+"");
-                invitationResult.setData(map);
-                return invitationResult;
+                //如果该邮箱账号在数据库中有重复, 返回错误
+                if (accounts.size() != 1) {
+                    invitationResult.setCode(WRONG);
+                    invitationResult.setMsg("邀请码不正确");
+                    // logout
+                    logger.error("email account duplicate. 邮箱账号有重复。" +
+                            "invitationCode : " + invitationCode +
+                            ", account : " + invitation.getInvitationEmail());
+                    return invitationResult;
+                }
+                account = accounts.get(0);
             }
         }
+        return successResult(invitationResult, invitation, account, deadlineTime);
     }
-
-    @Autowired
-    private CaptchaMapper captchaMapper;
 
     @Transactional
     public CaptchaResult searchCaptcha(String invitationCode, String captchaTo) {
@@ -230,7 +217,7 @@ public class InvitationServiceImpl implements InvitationService{
 
         Example example = new Example(Invitation.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("invitationCode",invitationCode);
+        criteria.andEqualTo(this.invitationCode, invitationCode);
         List<Invitation> invitations = invitationMapper.selectByExample(example);
         if(invitations.size() != 1) {
             throw new RuntimeException("没有找到对应的邀请码,或者邀请码不唯一");
@@ -319,26 +306,64 @@ public class InvitationServiceImpl implements InvitationService{
         return captchaResult;
     }
 
-    private Example createExample(Map<String,Object> searchmap) {
+    private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Invitation.class);
         Example.Criteria criteria = example.createCriteria();
-        if (searchmap != null) {
-            if (searchmap.get("invitationId") != null) {
-                criteria.andEqualTo("invitationId", searchmap.get("invitationId"));
+        if (searchMap != null) {
+            if (searchMap.get(invitationId) != null) {
+                criteria.andEqualTo(invitationId, searchMap.get(invitationId));
             }
-            if (searchmap.get("invitationCode") != null) {
-                criteria.andEqualTo("invitationCode",searchmap.get("invitationCode"));
+            if (searchMap.get(invitationCode) != null) {
+                criteria.andEqualTo(invitationCode, searchMap.get(invitationCode));
             }
-            if (searchmap.get("invitationLifetime") != null) {
-                criteria.andEqualTo("invitationLifetime",searchmap.get("invitationLifetime"));
+            if (searchMap.get(invitationLifetime) != null) {
+                criteria.andEqualTo(invitationLifetime, searchMap.get(invitationLifetime));
             }
-            if (searchmap.get("invitationEmail") != null) {
-                criteria.andEqualTo("invitationEmail",searchmap.get("invitationEmail"));
+            if (searchMap.get(invitationEmail) != null) {
+                criteria.andEqualTo(invitationEmail, searchMap.get(invitationEmail));
             }
-            if (searchmap.get("invitationCaptchaCount") != null) {
-                criteria.andEqualTo("captchaContent",searchmap.get("invitationCaptchaCount"));
+            if (searchMap.get(invitationCaptchaCount) != null) {
+                criteria.andEqualTo(invitationCaptchaCount, searchMap.get(invitationCaptchaCount));
             }
         }
         return example;
+    }
+
+    private Account getAccount(Invitation invitation) {
+        /*选择一个使用人数最少的邮箱,绑定邮箱*/
+        Account account = accountMapper.selectLeastUsedAccount();
+        if (account == null) {
+            logger.error("failed to bind account. 绑定邮箱失败。");
+            throw new RuntimeException();
+        }
+        //将被选择邮箱的使用次数+1
+        account.setAccountUsingCount(account.getAccountUsingCount() == null ? 1 : account.getAccountUsingCount() + 1);
+        //记得把更新的数据写回数据库!!!
+        accountMapper.updateByPrimaryKey(account);
+
+        return account;
+    }
+
+    private InvitationResult successResult(InvitationResult invitationResult, Invitation invitation, Account account, long deadlineTime) {
+        //返回与该激活码绑定的邮箱账号和密码
+        String accountEmail = account.getAccountEmail();
+        String accountPassword = account.getAccountPassword();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("accountPassword", accountEmail);
+        map.put("accountPassword", accountPassword);
+        // TODO: 带上邀请码信息
+        map.put("invitationCode", invitation.getInvitationCode());
+        //把到期时间带上
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
+        Date date = new Date(deadlineTime);
+        map.put("invitationDeadlinetime", formatter.format(date));
+        //把当天获取验证码剩余次数带上
+        int remainCount = TOTALCOUNT - invitation.getInvitationCaptchaCount();
+        if (remainCount < 0) {
+            remainCount = 0;
+        }
+        map.put("remainCount", remainCount + "");
+        invitationResult.setData(map);
+        return invitationResult;
     }
 }

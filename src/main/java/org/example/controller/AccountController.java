@@ -48,10 +48,10 @@ public class AccountController {
         return accountService.selectList(searchmap);
     }
 
-    @GetMapping("/selectOrder")
+    @GetMapping("/selectLeastUsedAccount")
     @ResponseBody
     public Account selectOrder(){
-        return accountService.selectOrder();
+        return accountService.selectLeastUsedAccount();
     }
 
     @PostMapping("/insert")

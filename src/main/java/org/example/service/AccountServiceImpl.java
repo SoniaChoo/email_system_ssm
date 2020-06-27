@@ -2,18 +2,25 @@ package org.example.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.log4j.Logger;
 import org.example.dao.AccountMapper;
 import org.example.entity.PageResult;
 import org.example.pojo.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.misc.ASCIICaseInsensitiveComparator;
 import tk.mybatis.mapper.entity.Example;
+
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
+    String accountId = "accountId";
+    String accountEmail = "accountEmail";
+    String accountPassword = "accountPassword";
+    String accountUsingCount = "accountUsingCount";
+
+    static Logger logger = Logger.getLogger(AccountServiceImpl.class);
 
     @Autowired
     private AccountMapper accountMapper;
@@ -26,37 +33,37 @@ public class AccountServiceImpl implements AccountService{
         return accountMapper.selectByPrimaryKey(id);
     }
 
+    public List<Account> selectList(Map<String, Object> searchMap) {
+        return accountMapper.selectByExample(createExample(searchMap));
+    }
+
+    /*选择当前使用最少的一个邮箱账号*/
+    public Account selectLeastUsedAccount() {
+        Account account = accountMapper.selectLeastUsedAccount();
+        if (account == null) {
+            logger.error("no more account to use. 系统中没有账户。");
+            throw new RuntimeException();
+        }
+        return account;
+    }
+
     public PageResult<Account> selectPage(int page, int size) {
-        PageHelper.startPage(page,size);
+        PageHelper.startPage(page, size);
         Page<Account> accounts = (Page<Account>) accountMapper.selectAll();
-        return new PageResult<Account>(accounts.getResult(),accounts.getTotal());
+        return new PageResult<Account>(accounts.getResult(), accounts.getTotal());
     }
 
-    public List<Account> selectList(Map<String, Object> searchmap) {
-        Example example = createExample(searchmap);
-        return accountMapper.selectByExample(example);
-    }
-
-    public PageResult<Account> selectPage(Map<String, Object> searchmap, int page, int size) {
-        PageHelper.startPage(page,size);
-        Example example = createExample(searchmap);
+    public PageResult<Account> selectPage(Map<String, Object> searchMap, int page, int size) {
+        PageHelper.startPage(page, size);
+        Example example = createExample(searchMap);
         Page<Account> accounts = (Page<Account>) accountMapper.selectByExample(example);
         return new PageResult<Account>(accounts.getResult(),accounts.getTotal());
     }
 
-    /*选择当前使用最少的一个邮箱账号*/
-    public Account selectOrder() {
-        Example example = new Example(Account.class);
-        example.orderBy("accountUsingCount").asc();
-        List<Account> accounts = accountMapper.selectByExample(example);
-        if (accounts.size() == 0) {
-            throw new RuntimeException();
-        }
-        return accounts.get(0);
-    }
-
     public void insert(Account account) {
-        account.setAccountUsingCount(0);
+        if (account.getAccountUsingCount() == null) {
+            account.setAccountUsingCount(0);
+        }
         accountMapper.insert(account);
     }
 
@@ -68,18 +75,21 @@ public class AccountServiceImpl implements AccountService{
         accountMapper.deleteByPrimaryKey(id);
     }
 
-    private Example createExample(Map<String,Object> searchmap) {
+    private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Account.class);
         Example.Criteria criteria = example.createCriteria();
-        if (searchmap != null) {
-            if (searchmap.get("accountId") != null) {
-                criteria.andEqualTo("accountId", searchmap.get("accountId"));
+        if (searchMap != null) {
+            if (searchMap.get(accountId) != null) {
+                criteria.andEqualTo(accountId, searchMap.get(accountId));
             }
-            if (searchmap.get("accountEmail") != null) {
-                criteria.andEqualTo("accountEmail",searchmap.get("accountEmail"));
+            if (searchMap.get(accountEmail) != null) {
+                criteria.andEqualTo(accountEmail, searchMap.get(accountEmail));
             }
-            if (searchmap.get("accountUsingCount") != null) {
-                criteria.andEqualTo("accountUsingCount",searchmap.get("accountUsingCount"));
+            if (searchMap.get(accountPassword) != null) {
+                criteria.andEqualTo(accountPassword, searchMap.get(accountPassword));
+            }
+            if (searchMap.get(accountUsingCount) != null) {
+                criteria.andEqualTo(accountUsingCount, searchMap.get(accountUsingCount));
             }
         }
         return example;

@@ -13,16 +13,17 @@ public interface AccountService {
     //根据id查找
     public Account selectById(String id);
 
-    //分页
-    public PageResult<Account> selectPage(int page, int size);
     //根据条件查找
-    public List<Account> selectList(Map<String,Object> searchmap);
+    List<Account> selectList(Map<String, Object> searchMap);
 
     //查询(顺序)
-    public Account selectOrder();
+    public Account selectLeastUsedAccount();
+
+    //分页
+    PageResult<Account> selectPage(int page, int size);
 
     //根据条件和分页查询
-    public PageResult<Account> selectPage(Map<String,Object> searchmap,int page,int size);
+    PageResult<Account> selectPage(Map<String, Object> searchMap, int page, int size);
 
     //增加新数据
     public void insert(Account account);

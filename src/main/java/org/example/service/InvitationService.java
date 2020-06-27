@@ -15,13 +15,14 @@ public interface InvitationService {
     //根据id查找
     public Invitation selectById(String id);
 
+    //根据条件查找
+    List<Invitation> selectList(Map<String, Object> searchMap);
+
     //分页
     public PageResult<Invitation> selectPage(int page, int size);
-    //根据条件查找
-    public List<Invitation> selectList(Map<String,Object> searchmap);
 
     //根据条件和分页查询
-    public PageResult<Invitation> selectPage(Map<String,Object> searchmap,int page,int size);
+    PageResult<Invitation> selectPage(Map<String, Object> searchMap, int page, int size);
 
     //增加新数据
     public void insert(Invitation invitation);
