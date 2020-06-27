@@ -129,6 +129,7 @@ public class InvitationServiceImpl implements InvitationService {
             /*选择一个使用人数最少的邮箱,绑定邮箱, 更新信息*/
             account = getAccount(invitation);
             invitation.setInvitationEmail(account.getAccountEmail());
+            invitation.setInvitationCaptchaCount(0);
             invitationMapper.updateByPrimaryKey(invitation);
 
             Integer lifetime = invitation.getInvitationLifetime();
@@ -172,6 +173,7 @@ public class InvitationServiceImpl implements InvitationService {
                 if (invitation.getInvitationEmail() == null) {
                     account = getAccount(invitation);
                     invitation.setInvitationEmail(account.getAccountEmail());
+                    invitation.setInvitationCaptchaCount(0);
                     invitationMapper.updateByPrimaryKey(invitation);
                 }
                 Example example = new Example(Account.class);
@@ -349,7 +351,7 @@ public class InvitationServiceImpl implements InvitationService {
         String accountEmail = account.getAccountEmail();
         String accountPassword = account.getAccountPassword();
         Map<String, String> map = new HashMap<String, String>();
-        map.put("accountPassword", accountEmail);
+        map.put("accountEmail", accountEmail);
         map.put("accountPassword", accountPassword);
         // TODO: 带上邀请码信息
         map.put("invitationCode", invitation.getInvitationCode());

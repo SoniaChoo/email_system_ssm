@@ -16,7 +16,7 @@ public class Result implements Serializable {
     public static final int EXCEEDING = 4; // 4代表邀请码当天获取次数超额
     public static final int NOTRECEIVE = 5; // 5代表邀请码正确并且有效且去输入的邮箱一致,还没有收到验证码
     public static final int OUTDATED = 6; // 6代表验证码已过期
-    public static final int TOTALCOUNT = 7;
+    public static final int TOTALCOUNT = 5; // TOTALCOUNT 代表一天可以获取验证码的最大次数
     public static final int DUPLICATE = 8; // 8代表邀请码在数据库中有重复
 
     private Integer code;//0代表成功,1代表失败
