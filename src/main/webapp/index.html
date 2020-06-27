@@ -15,21 +15,76 @@
 
     <!-- Custom styles for this template -->
     <link href="./css/signin.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; }
+        html { height: 100%; }
+        body { height: 100%; background: #fff  50% 50% no-repeat; background-size: cover;}
+        .dowebok { position: absolute; left: 50%; top: 50%; width: 430px; height: 550px; margin: -300px 0 0 -215px; overflow: hidden;}
+        .contact{float:right; width: 50px;height:50px;background: url(./images/lock2.png) 0 0 no-repeat;}
+        .logo { width: 104px; height: 104px; margin: 50px auto 80px; background: url(./images/lock.png) 0 0 no-repeat; }
+        .form-item { position: relative; width: 360px; margin: 0 auto; padding-bottom: 30px;}
+        .form-item input { width: 288px; height: 48px; padding-left: 70px; border: 1px solid #fff; border-radius: 25px; font-size: 18px; color: #fff; background-color: transparent; outline: none;}
+        .form-item button { width: 360px; height: 50px; border: 0; border-radius: 25px; font-size: 18px; color: #1f6f4a; outline: none; cursor: pointer; background-color: #fff; }
+        #username { background: url(./images/emil.png) 20px 14px no-repeat; }
+        #password { background: url(./images/password.png) 23px 11px no-repeat; }
+        .tip { display: none; position: absolute; left: 20px; top: 52px; font-size: 14px; color: #f50; }
+        .reg-bar { width: 360px; margin: 20px auto 0; font-size: 14px; overflow: hidden;}
+        .reg-bar a { color: #fff; text-decoration: none; }
+        .reg-bar a:hover { text-decoration: underline; }
+        .reg-bar .reg { float: left; }
+        .reg-bar .forget { float: right; }
+        .dowebok ::-webkit-input-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
+        .dowebok :-moz-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
+        .dowebok ::-moz-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
+        .dowebok :-ms-input-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
 
+        .ub-chat{
+            display: inline-block;
+            border-radius: 3px;
+            height: 42px;
+            line-height: 42px;
+            text-align: center;
+            background-color: #fff;
+            color: black;
+            width: 120px;
+            font-size: 15px;
+        }
+        .ub-chat i{
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: transparent     url(./images/lock3.png) no-repeat center center;
+            background-size: 16px auto;
+            margin-right: 4px;
+            vertical-align: -2px;
+        }
+        @media screen and (max-width: 500px) {
+            * { box-sizing: border-box; }
+            .dowebok { position: static; width: auto; height: auto; margin: 0 30px; border: 0; border-radius: 0; }
+            .logo { margin: 50px auto; }
+            .form-item { width: auto; }
+            .form-item input, .form-item button, .reg-bar { width: 100%; }
+        }
+    </style>
     <script src="./statics/jquery-3.5.1.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-<div>
-    <div class="container">
-        <form name="myForm" >
-            <div class="form-group">
-                <label>邀请码</label>
-                <input name="invitationCode" type="text" class="form-control" id="invitationCode" placeholder="请输入您的邀请码"  required="true">
-            </div>
-            <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" style="background-color: #398439" onclick="return validate()" >提交</button>
-        </form>
-    </div>
+<div class="ub-chat">
+    <i></i>
+    <a href="http://www.vipbaiduyun.com/thread-1449-1-1.html">联系我们</a>
+</div>
+
+<div class="logo"></div>
+<div class="container">
+    <form name="myForm" >
+        <div class="form-group">
+            <div><label>邀请码</label></div>
+            <input name="invitationCode" type="text" class="form-control" id="invitationCode" placeholder="请输入您的邀请码"  required="true">
+        </div>
+        <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" style="background-color: #398439" onclick="return validate()" >提交</button>
+    </form>
 </div>
 
 <div id = "mydiv" border></div>
@@ -77,14 +132,14 @@
                     html = "<div>"+"邀请码不正确"+"</div>";
                     $("#myaccountInfo").html(html)
                 }else if(rdata.code===2){
-                    html = "<div>"+"邀请码已过期,请重新购买"+"</div>";
+                    html = "<div>"+"抱歉，您的邀请码过期了，需延时续费，请联系客服"+"</div>";
                     $("#myaccountInfo").html(html)
                 }else{
                     $("#myModal").modal('hide');
                    /* html="<div id='myaccount'>" +"账号:" +rdata.data.accountEmail+"</div>"
                         +"<div id='mypassword'>" +"密码:" +rdata.data.accountPassword+"</div>";
                     $("#myaccountInfo").html(html)*/
-                    document.location.href="./home.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail+"&mypwd="+rdata.data.accountPassword+"&invitationDeadlinetime="+rdata.data.invitationDeadlinetime;
+                    document.location.href="./hometest.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail+"&mypwd="+rdata.data.accountPassword+"&invitationDeadlinetime="+rdata.data.invitationDeadlinetime;
                 }
             }
         })
