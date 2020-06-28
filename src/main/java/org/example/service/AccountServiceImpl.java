@@ -12,6 +12,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -61,6 +62,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void insert(Account account) {
+        if (account.getAccountId() == null) {
+            account.setAccountId(UUID.randomUUID().toString());
+        }
         if (account.getAccountUsingCount() == null) {
             account.setAccountUsingCount(0);
         }

@@ -44,7 +44,6 @@
     <div id="mycontent" style="border: #8fa1c7; height: 200px; width: 200px"></div>
 
         <div class="container">
-            <div id="mycode" style="text-align: center">邀请码:</div>
             <div id="myaccount" style="text-align: center">账号:</div>
             <div id="mypassword" style="text-align: center">密码:</div>
 
@@ -68,7 +67,7 @@
         let count = 60;
         const countDown = setInterval(() => {
             if (count === 0) {
-                $('#btn').text('获取验证码(1日只能获取5次)').removeAttr('disabled');
+                $('#btn').text('获取邮箱验证码(1日只能获取5次)').removeAttr('disabled');
                 $('#btn').css({
                     background: '#ff9400',
                     color: '#fff',
@@ -107,7 +106,6 @@
     document.getElementById("myaccount").innerHTML = "百度网盘账号:"+urlMsg.captchaTo;
     document.getElementById("mypassword").innerHTML = "百度网盘密码:"+urlMsg.mypwd;
     document.getElementById("mydeadlinetime").innerHTML = "账号到期时间:"+urlMsg.invitationDeadlinetime;
-    document.getElementById("mycode").innerHTML = "邀请码:"+urlMsg.invitationCode;
     function getCaptchaCode() {
         $.ajax({
             url:"./invitation/searchCaptcha?invitationCode="+urlMsg.invitationCode+"&captchaTo="+urlMsg.captchaTo,
