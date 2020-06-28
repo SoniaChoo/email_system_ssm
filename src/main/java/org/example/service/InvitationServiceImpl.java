@@ -183,8 +183,17 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Transactional
     public CaptchaResult searchCaptcha(String code, String accountEmail) {
-        code = code.trim();
         CaptchaResult captchaResult = new CaptchaResult();
+        InvitationResult invitationResult = checkInvitation(code);
+        if (invitationResult.getCode()!=RIGHT) {
+            captchaResult.setCode(WRONG);
+            captchaResult.setMsg("邀请码不正确");
+            logger.error("invitation outdated. 邀请码已过期。" +
+                    "invitationCode : " + code +
+                    ", account : " + accountEmail);
+            return captchaResult;
+        }
+
         Invitation invitation;
         Captcha captcha;
         Date nowDate = new Date(); // 系统当前时间
