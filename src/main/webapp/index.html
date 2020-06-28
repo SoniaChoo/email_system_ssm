@@ -20,7 +20,7 @@
         html { height: 100%; }
         body { height: 100%; background: #fff  50% 50% no-repeat; background-size: cover;}
         .dowebok { position: absolute; left: 50%; top: 50%; width: 430px; height: 550px; margin: -300px 0 0 -215px; overflow: hidden;}
-        .contact{float:right; width: 50px;height:50px;background: url(./images/lock2.png) 0 0 no-repeat;}
+        .contact{float:right; width: 50px;height:50px;background: url(./images/lock3.png) 0 0 no-repeat;}
         .logo { width: 104px; height: 104px; margin: 50px auto 80px; background: url(./images/lock.png) 0 0 no-repeat; }
         .form-item { position: relative; width: 360px; margin: 0 auto; padding-bottom: 30px;}
         .form-item input { width: 288px; height: 48px; padding-left: 70px; border: 1px solid #fff; border-radius: 25px; font-size: 18px; color: #fff; background-color: transparent; outline: none;}
@@ -73,7 +73,7 @@
 <body>
 <div class="ub-chat">
     <i></i>
-    <a href="http://www.vipbaiduyun.com/thread-1449-1-1.html">联系我们</a>
+    <a href="http://www.vipbaiduyun.com/thread-1449-1-1.html"><span style="font-size: smaller; color: darkgrey">联系我们</span></a>
 </div>
 
 <div class="logo"></div>
@@ -139,7 +139,7 @@
                    /* html="<div id='myaccount'>" +"账号:" +rdata.data.accountEmail+"</div>"
                         +"<div id='mypassword'>" +"密码:" +rdata.data.accountPassword+"</div>";
                     $("#myaccountInfo").html(html)*/
-                    document.location.href="./hometest.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail+"&mypwd="+rdata.data.accountPassword+"&invitationDeadlinetime="+rdata.data.invitationDeadlinetime;
+                    document.location.href="./home.html?invitationCode="+$("#invitationCode").val()+"&captchaTo="+rdata.data.accountEmail+"&mypwd="+rdata.data.accountPassword+"&invitationDeadlinetime="+rdata.data.invitationDeadlinetime;
                 }
             }
         })

@@ -188,6 +188,7 @@ public class InvitationServiceImpl implements InvitationService {
         Invitation invitation;
         Captcha captcha;
         Date nowDate = new Date(); // 系统当前时间
+        Map<String, String> map = new HashMap<String, String>();
 
         Example example = new Example(Invitation.class);
         Example.Criteria criteria = example.createCriteria();
@@ -224,6 +225,8 @@ public class InvitationServiceImpl implements InvitationService {
         int usedCount = invitation.getInvitationCaptchaCount() == null ? 0 : invitation.getInvitationCaptchaCount();
         int remainCount = TOTALCOUNT - usedCount;
         if (remainCount < 0) {
+            map.put("remainCount", remainCount + "");
+            captchaResult.setData(map);
             captchaResult.setCode(EXCEEDING);
             captchaResult.setMsg("今天获取验证码次数已经达到上限");
             return captchaResult;
@@ -241,6 +244,8 @@ public class InvitationServiceImpl implements InvitationService {
 
         //邮箱表可能还没有对应邮箱的邮件,也有可能有很多封,当有很多封的时候,我们把最新的一封返回
         if (captchas.size() == 0) {
+            map.put("remainCount", remainCount + "");
+            captchaResult.setData(map);
             captchaResult.setCode(NOTRECEIVE);
             captchaResult.setMsg("验证码还未收到");
             return captchaResult;
@@ -253,13 +258,14 @@ public class InvitationServiceImpl implements InvitationService {
 
         long oneHourAgo = nowDate.getTime() - 60 * 60 * 1000;
         if (captcha.getCaptchaReceiveTime().getTime() < oneHourAgo) {
+            map.put("remainCount", remainCount + "");
+            captchaResult.setData(map);
             captchaResult.setCode(OUTDATED);
             captchaResult.setMsg("验证码已过期");
             return captchaResult;
         }
 
         //成功的时候添加数据
-        Map<String, String> map = new HashMap<String, String>();
         map.put("captchaCode", captcha.getCaptchaCode());
 
         //成功的时候,验证次数加1

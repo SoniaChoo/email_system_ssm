@@ -238,11 +238,13 @@ input {
     margin-top: 15px;
     text-align: center;
     font-size: 12px;
-    color: #cfcfcf;
+    color: black;
+    text-decoration: none;
 }
 
 .forgot-pass a {
-    color: #cfcfcf;
+    color: black;
+    text-decoration: none;
 }
 
 .submit {
