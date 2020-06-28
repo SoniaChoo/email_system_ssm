@@ -41,14 +41,14 @@ public class InvitationController {
     /*分页加条件*/
     @PostMapping("/selectPage")
     @ResponseBody
-    public PageResult<Invitation> selectPage(@RequestBody Map<String,Object> searchmap, int page, int size) {
-        return invitationService.selectPage(searchmap,page,size);
+    public PageResult<Invitation> selectPage(@RequestBody Map<String, Object> searchMap, int page, int size) {
+        return invitationService.selectPage(searchMap, page, size);
     }
 
     @PostMapping("/selectList")
     @ResponseBody
-    public List<Invitation> selectList(@RequestBody Map<String, Object> searchmap){
-        return invitationService.selectList(searchmap);
+    public List<Invitation> selectList(@RequestBody Map<String, Object> searchMap) {
+        return invitationService.selectList(searchMap);
     }
 
     @PostMapping("/insert")

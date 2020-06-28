@@ -5,10 +5,11 @@ import org.example.entity.Result;
 import org.example.pojo.Captcha;
 import org.example.service.CaptchaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -41,14 +42,14 @@ public class CaptchaController {
     /*分页加条件*/
     @PostMapping("/selectPage")
     @ResponseBody
-    public PageResult<Captcha> selectPage(@RequestBody Map<String,Object> searchmap,int page,int size) {
-        return captchaService.selectPage(searchmap,page,size);
+    public PageResult<Captcha> selectPage(@RequestBody Map<String, Object> searchMap, int page, int size) {
+        return captchaService.selectPage(searchMap, page, size);
     }
 
     @PostMapping("/selectList")
     @ResponseBody
-    public List<Captcha> selectList(@RequestBody Map<String, Object> searchmap){
-        return captchaService.selectList(searchmap);
+    public List<Captcha> selectList(@RequestBody Map<String, Object> searchMap) {
+        return captchaService.selectList(searchMap);
     }
 
     @PostMapping("/insert")
@@ -72,4 +73,10 @@ public class CaptchaController {
         return new Result();
     }
 
+    @RequestMapping("/log")
+    @ResponseBody
+    public Result logCaptcha(HttpServletRequest request) {
+        captchaService.log(request);
+        return new Result();
+    }
 }

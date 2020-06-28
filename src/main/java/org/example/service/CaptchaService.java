@@ -3,6 +3,8 @@ package org.example.service;
 import org.example.entity.PageResult;
 import org.example.pojo.Captcha;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -31,4 +33,6 @@ public interface CaptchaService {
     public void update(Captcha captcha);
 
     public void delete(String id);
+
+    public void log(HttpServletRequest request);
 }
