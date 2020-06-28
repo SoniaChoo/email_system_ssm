@@ -83,7 +83,7 @@
             <div><label>邀请码</label></div>
             <input name="invitationCode" type="text" class="form-control" id="invitationCode" placeholder="请输入您的邀请码"  required="true">
         </div>
-        <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" style="background-color: #398439" onclick="return validate()" >提交</button>
+        <button type="button" id="submitBtn" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" style="background-color: #398439" onclick="return validate()" >提交</button>
     </form>
 </div>
 
@@ -144,6 +144,12 @@
             }
         })
     }
+
+    $("#invitationCode").keydown(function (event) {
+        if(event.keyCode == 13) {
+            $("#submitBtn").click();
+        }
+    })
 </script>
 
 
