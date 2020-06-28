@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 
 public class Util {
     public static void main(String[] args) {
-        String prefix = "7tian";
-        String lifetime = "7";
+        String prefix = "366tian";
+        String lifetime = "366";
         int count = 200;
         List<String> codeList = generateInvitationCode(prefix, count);
         // INSERT INTO `email_system`.`invitation` (`invitation_id`, `invitation_code`, `invitation_lifetime`) VALUES ('10', 'dddddddd', '1');
@@ -38,7 +38,7 @@ public class Util {
         List<String> codeList = new ArrayList<String>(count);
         for (int i = 0; i < count; i++) {
             String[] split = UUID.randomUUID().toString().split("-");
-            if (split.length != 4) {
+            if (split.length < 3) {
                 System.out.println("UUID format error!");
                 return null;
             }
