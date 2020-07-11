@@ -60,6 +60,7 @@
 
             <button type="button" id="btn" class="submit" onclick="getCaptchaCode()">获取邮箱验证码(1日只能获取<strong>5</strong>次)</button>
             <div id="myremaincount" style="text-align: center"></div>
+            <div id="mycaptcha" style="text-align: center"></div>
         </div>
 
 <script>
@@ -125,6 +126,7 @@
                 }else {
                     console.log(captchaData)
                     alert("验证码:" +captchaData.data.captchaCode+" 请在1小时内完成验证,超过1小时请重新获取");
+                    document.getElementById("mycaptcha").innerHTML = "验证码:" +captchaData.data.captchaCode+" 请在1小时内完成验证,超过1小时请重新获取"
                 }
                 var myremaincount = captchaData.data.remainCount;
                 document.getElementById("myremaincount").innerHTML = "今日剩余获取验证码次数:" + myremaincount + "次"

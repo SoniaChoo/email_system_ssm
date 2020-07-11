@@ -1,11 +1,9 @@
 package org.example.controller;
 
-import org.example.entity.CaptchaResult;
-import org.example.entity.InvitationResult;
-import org.example.entity.PageResult;
-import org.example.entity.Result;
+import org.example.entity.*;
 import org.example.pojo.Invitation;
 import org.example.service.InvitationService;
+import org.example.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +19,16 @@ public class InvitationController {
 
     @GetMapping("/selectAll")
     @ResponseBody
-    public List<Invitation> selectAll(){
+    public List<Invitation> selectAll() {
         return invitationService.selectAll();
     }
 
     @GetMapping("/selectById")
     @ResponseBody
     public Invitation selectById(String id) {
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println(id);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         return invitationService.selectById(id);
     }
 
@@ -35,7 +36,7 @@ public class InvitationController {
     @GetMapping("/selectPage")
     @ResponseBody
     public PageResult<Invitation> selectPage(int page, int size) {
-        return invitationService.selectPage(page,size);
+        return invitationService.selectPage(page, size);
     }
 
     /*分页加条件*/
@@ -53,7 +54,7 @@ public class InvitationController {
 
     @PostMapping("/insert")
     @ResponseBody
-    public Result insert(@RequestBody Invitation invitation){
+    public Result insert(@RequestBody Invitation invitation) {
         invitationService.insert(invitation);
         return new Result();
     }
@@ -85,5 +86,12 @@ public class InvitationController {
     public CaptchaResult searchCaptcha(String invitationCode, String captchaTo) {
         CaptchaResult captchaResult = invitationService.searchCaptcha(invitationCode, captchaTo);
         return captchaResult;
+    }
+
+    @RequestMapping("/insertMany")
+    @ResponseBody
+    public Result insertMany(@RequestBody UtilResult utilResult) {
+        Util.generateInvitationCode(utilResult.getInvitationLifetime() + "test", utilResult.getCount());
+        return new Result();
     }
 }

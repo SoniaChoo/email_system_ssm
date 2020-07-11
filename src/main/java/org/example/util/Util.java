@@ -34,7 +34,7 @@ public class Util {
         return "";
     }
 
-    public static List<String> generateInvitationCode(String prefix, int count) {
+    public static List<String> generateInvitationCode(String prefix, Integer count) {
         List<String> codeList = new ArrayList<String>(count);
         for (int i = 0; i < count; i++) {
             String[] split = UUID.randomUUID().toString().split("-");
@@ -44,6 +44,10 @@ public class Util {
             }
             String uuidCode = split[0]+split[1]+split[2];
             codeList.add(prefix+uuidCode);
+        }
+        // TODO: replace this by SQL
+        for (String s : codeList) {
+            System.out.println(s);
         }
         return codeList;
     }

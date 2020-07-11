@@ -19,10 +19,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.example.entity.Result.*;
 
@@ -71,6 +68,9 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     public void insert(Invitation invitation) {
+        if (invitation.getInvitationId() == null) {
+            invitation.setInvitationId(UUID.randomUUID().toString());
+        }
         if (invitation.getInvitationCaptchaCount() == null) {
             invitation.setInvitationCaptchaCount(0);
         }
