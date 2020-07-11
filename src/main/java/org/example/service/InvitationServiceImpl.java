@@ -233,7 +233,7 @@ public class InvitationServiceImpl implements InvitationService {
         /*验证码获取次数*/
         int usedCount = invitation.getInvitationCaptchaCount() == null ? 0 : invitation.getInvitationCaptchaCount();
         int remainCount = TOTALCOUNT - usedCount;
-        if (remainCount < 0) {
+        if (remainCount <= 0) {
             map.put("remainCount", remainCount + "");
             captchaResult.setData(map);
             captchaResult.setCode(EXCEEDING);
@@ -246,7 +246,7 @@ public class InvitationServiceImpl implements InvitationService {
         Example.Criteria criteria1 = captchaExample.createCriteria();
         criteria1.andEqualTo("captchaTo", accountEmail);
         criteria1.andLike("captchaFrom", "%@baidu.com");
-        criteria1.andNotLike("captchaHtml", "%密码%"); //防止有人修改密码
+        criteria1.andEqualTo("captchaSubject", "百度帐号--登录保护验证"); //防止有人修改密码
         criteria1.andEqualTo("captchaRead", 0);
         captchaExample.orderBy("captchaReceiveTime").desc();
         List<Captcha> captchas = captchaMapper.selectByExample(captchaExample);
