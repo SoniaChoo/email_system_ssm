@@ -3,6 +3,7 @@
 3. 数据库全部需要 default value, 比如说captcha表read字段.
 
 2. mysql5.7 创建新用户， 设置所有权限，允许远程访问。
+
 ```shell script
 sudo apt update # 更新依赖包
 sudo apt install mysql-server # 安装数据库
@@ -20,8 +21,6 @@ sudo mysql -u root -p # 用刚刚设置的密码登陆进入数据库
 
 
 ```
-
-
 
 1.  jdk JDK在8之前的版本，对日期时间的处理相当麻烦，
            有些方法设计非常反人类。而Joda-Time使用起来不仅方便，
