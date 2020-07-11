@@ -69,6 +69,18 @@
         </dependency>
 
         <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+            <version>4.1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
             <version>2.0.4</version>
@@ -98,9 +110,39 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.67</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        <!--jdk JDK在8之前的版本，对日期时间的处理相当麻烦，
+        有些方法设计非常反人类。而Joda-Time使用起来不仅方便，
+        而且可读性强。虽然JDK 8引用了新的时间处理类，而且参与设计的人也正是Joda-Time的作者，
+        但是由于各种原因，很多项目还是使用的JDK7，使用Joda-Time还是一个不错的选择。-->
+        <!--<dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.6</version>
+        </dependency>-->
     </dependencies>
 
     <build>
+        <finalName>huiyuan</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>

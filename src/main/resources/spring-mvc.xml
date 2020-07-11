@@ -22,7 +22,36 @@
                     </list>
                 </property>
             </bean>
+
+<!--            <bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
+<!--                <property name="supportedMediaTypes">-->
+<!--                    <list>-->
+<!--                        <value>application/json;charset=UTF-8</value>-->
+<!--                    </list>-->
+<!--                </property>-->
+<!--            </bean>-->
+            <!--解决乱码-->
+<!--            <bean class="org.springframework.http.converter.StringHttpMessageConverter" >-->
+<!--                <property name = "supportedMediaTypes">-->
+<!--                    <list>-->
+<!--                        <value>application/json;charset=utf-8</value>-->
+<!--                        <value>text/html;charset=utf-8</value>-->
+<!--                        &lt;!&ndash; application 可以在任意 form 表单里面 enctype 属性默认找到-->
+<!--                        <value>application/x-www-form-urlencoded</value>-->
+<!--                         &ndash;&gt;-->
+<!--                    </list>-->
+<!--                </property>-->
+<!--            </bean>-->
+<!--            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >-->
+<!--                <property name="supportedMediaTypes">-->
+<!--                    <list>-->
+<!--                        <value>application/json; charset=UTF-8</value>-->
+<!--                        <value>application/x-www-form-urlencoded; charset=UTF-8</value>-->
+<!--                    </list>-->
+<!--                </property>-->
+<!--            </bean>-->
         </mvc:message-converters>
+
     </mvc:annotation-driven>
 
     <mvc:default-servlet-handler></mvc:default-servlet-handler><!--这里如果报红看看上面导入的是不是mvc,spring经常没有导入mvc,而时导入了cache-->
