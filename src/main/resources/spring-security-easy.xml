@@ -37,7 +37,8 @@
         <authentication-provider>
             <user-service>
 <!--                <user name="admin" password="{noop}123456" authorities="ROLE_ADMIN"/>-->
-                <user name="admin" password="{bcrypt}$2a$10$.RMRJKvAzlUtfBTb9krWiO8Sn3YFO4sywQ9VtVQxkIwFTGzUpKdM6" authorities="ROLE_ADMIN"/>
+                <user name="wangpanhuiyuan_admin" password="{bcrypt}$2a$10$MHgIlNyehPqj5xAzvDb0mOJqDn6gzP4E9pmupFgAEqPpuizWBFvzq" authorities="ROLE_ADMIN"/>
+                <user name="sonia" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_ADMIN"/>
             </user-service>
         </authentication-provider>
     </authentication-manager>
