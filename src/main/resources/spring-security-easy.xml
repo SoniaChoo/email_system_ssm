@@ -36,7 +36,8 @@
     <authentication-manager>
         <authentication-provider>
             <user-service>
-                <user name="admin" password="{noop}123456" authorities="ROLE_ADMIN"/>
+<!--                <user name="admin" password="{noop}123456" authorities="ROLE_ADMIN"/>-->
+                <user name="admin" password="{bcrypt}$2a$10$.RMRJKvAzlUtfBTb9krWiO8Sn3YFO4sywQ9VtVQxkIwFTGzUpKdM6" authorities="ROLE_ADMIN"/>
             </user-service>
         </authentication-provider>
     </authentication-manager>

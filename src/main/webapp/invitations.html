@@ -68,12 +68,12 @@
 
             <el-table :data="tableData" border style="width: 100%">
 <!--                <el-table-column prop="invitationId" label="邀请码id" width="100"></el-table-column>-->
-                <el-table-column prop="invitationCode" label="邀请码号码" width="300"></el-table-column>
-                <el-table-column prop="invitationLifetime" label="邀请码有效天数" width="100"></el-table-column>
-                <el-table-column prop="invitationEmail" label="邀请码绑定的邮箱" width="100"></el-table-column>
-                <el-table-column prop="invitationActivateTime" label="邀请码激活时间" width="100"></el-table-column>
-                <el-table-column prop="invitationCaptchaCount" label="24小时内验证次数" width="100"></el-table-column>
-                <el-table-column prop="invitationFirstCaptchaTime" label="首次验证时间" width="100"></el-table-column>
+                <el-table-column prop="invitationCode" label="邀请码号码" width="200"></el-table-column>
+                <el-table-column prop="invitationLifetime" label="邀请码有效天数" width="80"></el-table-column>
+                <el-table-column prop="invitationEmail" label="邀请码绑定的邮箱" width="220"></el-table-column>
+                <el-table-column prop="invitationActivateTime" label="邀请码激活时间" width="200"></el-table-column>
+                <el-table-column prop="invitationCaptchaCount" label="24小时内验证次数" width="180"></el-table-column>
+                <el-table-column prop="invitationFirstCaptchaTime" label="首次验证时间" width="120"></el-table-column>
                 <el-table-column label="操作"  >
                     <template slot-scope="scope">
                         <el-button @click="edit(scope.row.invitationId)" size="mini" type="primary" size="small">修改</el-button>
