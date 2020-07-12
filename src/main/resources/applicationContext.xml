@@ -6,4 +6,5 @@
     <import resource="spring-dao.xml"></import>
     <import resource="spring-service.xml"></import>
     <import resource="spring-mvc.xml"></import>
+    <import resource="spring-security-easy.xml"></import>
 </beans>

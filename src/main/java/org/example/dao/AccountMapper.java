@@ -4,8 +4,6 @@ import org.apache.ibatis.annotations.Select;
 import org.example.pojo.Account;
 import tk.mybatis.mapper.common.Mapper;
 
-import java.util.List;
-
 public interface AccountMapper extends Mapper<Account> {
     @Select("select " +
             "account_id as accountId, " +
