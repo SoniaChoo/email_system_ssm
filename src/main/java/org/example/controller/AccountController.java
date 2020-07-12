@@ -4,6 +4,7 @@ import org.example.entity.PageResult;
 import org.example.entity.Result;
 import org.example.pojo.Account;
 import org.example.service.AccountService;
+import org.example.service.InvitationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,8 @@ import java.util.Map;
 public class AccountController {
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private InvitationService invitationService;
     @GetMapping("/selectAll")
     @ResponseBody
     public List<Account> selectAll(){
@@ -72,6 +75,14 @@ public class AccountController {
     @ResponseBody
     public Result delete(String id) {
         accountService.delete(id);
+        return new Result();
+    }
+
+    @GetMapping("deleteByEmail")
+    @ResponseBody
+    public Result deleteByEmail(String email) {
+        accountService.deleteByEmail(email);
+        invitationService.unbindEmail(email);
         return new Result();
     }
 

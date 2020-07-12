@@ -32,4 +32,6 @@ public interface AccountService {
     public void update(Account account);
 
     public void delete(String id);
+
+    public void deleteByEmail(String email);
 }

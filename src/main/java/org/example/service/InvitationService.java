@@ -33,6 +33,8 @@ public interface InvitationService {
     //删除数据
     public void delete(String id);
 
+    public void unbindEmail(String email);
+
     //验证邀请码的有效性,若有效,并返回一个邮箱账号密码
     public InvitationResult checkInvitation(String invitationCode);
 

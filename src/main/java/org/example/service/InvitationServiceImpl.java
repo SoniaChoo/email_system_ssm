@@ -85,6 +85,18 @@ public class InvitationServiceImpl implements InvitationService {
         invitationMapper.deleteByPrimaryKey(id);
     }
 
+    public void unbindEmail(String email) {
+        Example example = new Example(Invitation.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo(invitationEmail, email);
+        List<Invitation> invitations = invitationMapper.selectByExample(example);
+
+        for (Invitation i : invitations) {
+            i.setInvitationEmail(null);
+            invitationMapper.updateByPrimaryKey(i);
+        }
+    }
+
     //验证邀请码的有效性,若有效,并返回一个邮箱账号密码
     @Transactional
     public InvitationResult checkInvitation(String code) {

@@ -79,6 +79,13 @@ public class AccountServiceImpl implements AccountService {
         accountMapper.deleteByPrimaryKey(id);
     }
 
+    public void deleteByEmail(String email) {
+        Example example = new Example(Account.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo(accountEmail, email);
+        accountMapper.deleteByExample(example);
+    }
+
     private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Account.class);
         Example.Criteria criteria = example.createCriteria();
