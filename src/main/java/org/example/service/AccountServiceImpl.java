@@ -58,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
         PageHelper.startPage(page, size);
         Example example = createExample(searchMap);
         Page<Account> accounts = (Page<Account>) accountMapper.selectByExample(example);
-        return new PageResult<Account>(accounts.getResult(),accounts.getTotal());
+        return new PageResult<Account>(accounts.getResult(), accounts.getTotal());
     }
 
     public void insert(Account account) {
@@ -90,16 +90,16 @@ public class AccountServiceImpl implements AccountService {
         Example example = new Example(Account.class);
         Example.Criteria criteria = example.createCriteria();
         if (searchMap != null) {
-            if (searchMap.get(accountId) != null) {
+            if (searchMap.get(accountId) != null && !"".equals(searchMap.get(accountId))) {
                 criteria.andEqualTo(accountId, searchMap.get(accountId));
             }
-            if (searchMap.get(accountEmail) != null) {
+            if (searchMap.get(accountEmail) != null && !"".equals(searchMap.get(accountEmail))) {
                 criteria.andEqualTo(accountEmail, searchMap.get(accountEmail));
             }
-            if (searchMap.get(accountPassword) != null) {
+            if (searchMap.get(accountPassword) != null && !"".equals(searchMap.get(accountPassword))) {
                 criteria.andEqualTo(accountPassword, searchMap.get(accountPassword));
             }
-            if (searchMap.get(accountUsingCount) != null) {
+            if (searchMap.get(accountUsingCount) != null && !"".equals(searchMap.get(accountUsingCount))) {
                 criteria.andEqualTo(accountUsingCount, searchMap.get(accountUsingCount));
             }
         }

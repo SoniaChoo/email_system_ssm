@@ -16,7 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
-public class AdminServiceImpl implements AdminService{
+public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminMapper adminMapper;
@@ -65,16 +65,16 @@ public class AdminServiceImpl implements AdminService{
         Example example = new Example(Admin.class);
         Example.Criteria criteria = example.createCriteria();
         if (searchMap != null) {
-            if (searchMap.get("adminId") != null) {
+            if (searchMap.get("adminId") != null && !"".equals(searchMap.get("adminId"))) {
                 criteria.andEqualTo("adminId", searchMap.get("adminId"));
             }
-            if (searchMap.get("loginName") != null) {
+            if (searchMap.get("loginName") != null && !"".equals(searchMap.get("loginName"))) {
                 criteria.andEqualTo("loginName", searchMap.get("loginName"));
             }
-            if (searchMap.get("password") != null) {
+            if (searchMap.get("password") != null && !"".equals(searchMap.get("password"))) {
                 criteria.andEqualTo("password", searchMap.get("password"));
             }
-            if (searchMap.get("status") != null) {
+            if (searchMap.get("status") != null && !"".equals(searchMap.get("status"))) {
                 criteria.andEqualTo("status", searchMap.get("status"));
             }
         }

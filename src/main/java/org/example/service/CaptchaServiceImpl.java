@@ -22,7 +22,7 @@ import java.rmi.server.ExportException;
 import java.util.*;
 
 @Service
-public class CaptchaServiceImpl implements CaptchaService{
+public class CaptchaServiceImpl implements CaptchaService {
     static Logger logger = Logger.getLogger(AccountServiceImpl.class);
 
     @Autowired
@@ -60,7 +60,7 @@ public class CaptchaServiceImpl implements CaptchaService{
         if (captcha.getCaptchaId() == null) {
             captcha.setCaptchaId(UUID.randomUUID().toString());
         }
-        if(captcha.getCaptchaReceiveTime()==null){
+        if (captcha.getCaptchaReceiveTime() == null) {
             captcha.setCaptchaReceiveTime(new Date());
         }
         captcha.setCaptchaRead(0);
@@ -96,23 +96,23 @@ public class CaptchaServiceImpl implements CaptchaService{
 
         Enumeration<String> headerNames = request.getHeaderNames();
         System.out.println("Header\t\t\tValue");
-        while(headerNames.hasMoreElements()) {
+        while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             System.out.println(headerName + ":\t\t\t" + request.getHeader(headerName));
         }
 
         System.out.println("\nBody");
-        try{
+        try {
             BufferedReader br = request.getReader();
             String str = "";
-            while((str = br.readLine()) != null){
+            while ((str = br.readLine()) != null) {
                 System.out.println(str);
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             System.out.println("\nCaptchaServiceImpl#log()+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
         }
     }
@@ -121,22 +121,22 @@ public class CaptchaServiceImpl implements CaptchaService{
         Example example = new Example(Captcha.class);
         Example.Criteria criteria = example.createCriteria();
         if (searchMap != null) {
-            if (searchMap.get("captchaId") != null) {
+            if (searchMap.get("captchaId") != null && !"".equals(searchMap.get("captchaId"))) {
                 criteria.andEqualTo("captchaId", searchMap.get("captchaId"));
             }
-            if (searchMap.get("captchaFrom") != null) {
+            if (searchMap.get("captchaFrom") != null && !"".equals(searchMap.get("captchaFrom"))) {
                 criteria.andEqualTo("captchaFrom", searchMap.get("captchaFrom"));
             }
-            if (searchMap.get("captchaTo") != null) {
+            if (searchMap.get("captchaTo") != null && !"".equals(searchMap.get("captchaTo"))) {
                 criteria.andEqualTo("captchaTo", searchMap.get("captchaTo"));
             }
-            if (searchMap.get("captchaSubject") != null) {
+            if (searchMap.get("captchaSubject") != null && !"".equals(searchMap.get("captchaSubject"))) {
                 criteria.andLike("captchaSubject", "%" + searchMap.get("captchaSubject") + "%");
             }
-            if (searchMap.get("captchaContent") != null) {
+            if (searchMap.get("captchaContent") != null && !"".equals(searchMap.get("captchaContent"))) {
                 criteria.andLike("captchaContent", "%" + searchMap.get("captchaContent") + "%");
             }
-            if (searchMap.get("captchaRead") != null) {
+            if (searchMap.get("captchaRead") != null && !"".equals(searchMap.get("captchaRead"))) {
                 criteria.andEqualTo("captchaRead", searchMap.get("captchaRead"));
             }
         }

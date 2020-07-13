@@ -197,7 +197,7 @@ public class InvitationServiceImpl implements InvitationService {
     public CaptchaResult searchCaptcha(String code, String accountEmail) {
         CaptchaResult captchaResult = new CaptchaResult();
         InvitationResult invitationResult = checkInvitation(code);
-        if (invitationResult.getCode()!=RIGHT) {
+        if (invitationResult.getCode() != RIGHT) {
             captchaResult.setCode(WRONG);
             captchaResult.setMsg("邀请码不正确");
             logger.error("invitation outdated. 邀请码已过期。" +
@@ -304,19 +304,19 @@ public class InvitationServiceImpl implements InvitationService {
         Example example = new Example(Invitation.class);
         Example.Criteria criteria = example.createCriteria();
         if (searchMap != null) {
-            if (searchMap.get(invitationId) != null) {
+            if (searchMap.get(invitationId) != null && !"".equals(searchMap.get(invitationId))) {
                 criteria.andEqualTo(invitationId, searchMap.get(invitationId));
             }
-            if (searchMap.get(invitationCode) != null) {
+            if (searchMap.get(invitationCode) != null && !"".equals(searchMap.get(invitationCode))) {
                 criteria.andEqualTo(invitationCode, searchMap.get(invitationCode));
             }
-            if (searchMap.get(invitationLifetime) != null) {
+            if (searchMap.get(invitationLifetime) != null && !"".equals(searchMap.get(invitationLifetime))) {
                 criteria.andEqualTo(invitationLifetime, searchMap.get(invitationLifetime));
             }
-            if (searchMap.get(invitationEmail) != null) {
+            if (searchMap.get(invitationEmail) != null && !"".equals(searchMap.get(invitationEmail))) {
                 criteria.andEqualTo(invitationEmail, searchMap.get(invitationEmail));
             }
-            if (searchMap.get(invitationCaptchaCount) != null) {
+            if (searchMap.get(invitationCaptchaCount) != null && !"".equals(searchMap.get(invitationCaptchaCount))) {
                 criteria.andEqualTo(invitationCaptchaCount, searchMap.get(invitationCaptchaCount));
             }
         }
