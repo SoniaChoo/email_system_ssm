@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
     <title>邀请码管理</title>
@@ -8,42 +8,13 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="./plugins/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/styleqingcheng.css">
-
-    <!-- 上传图片框样式，不使用上传组件可以删除此样式 -->
-<!--    <style>-->
-<!--        .avatar-uploader .el-upload {-->
-<!--            border: 1px dashed #d9d9d9;-->
-<!--            border-radius: 6px;-->
-<!--            cursor: pointer;-->
-<!--            position: relative;-->
-<!--            overflow: hidden;-->
-<!--        }-->
-<!--        .avatar-uploader .el-upload:hover {-->
-<!--            border-color: #409EFF;-->
-<!--        }-->
-<!--        .avatar-uploader-icon {-->
-<!--            font-size: 28px;-->
-<!--            color: #8c939d;-->
-<!--            width: 150px;-->
-<!--            height: 70px;-->
-<!--            line-height: 150px;-->
-<!--            text-align: center;-->
-<!--        }-->
-<!--        .avatar {-->
-<!--            width: 150px;-->
-<!--            height: 70px;-->
-<!--            display: block;-->
-<!--        }-->
-
-<!--    </style>-->
 </head>
+
 <body class="hold-transition">
 <div id="app">
-
     <div class="content-header">
         <h1>管理<small>邀请码管理</small></h1>
         <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
-<!--            <el-breadcrumb-item :to="{ path: './management.html' }">管理中心</el-breadcrumb-item>-->
             <el-breadcrumb-item><a href="./management.html">管理中心</a></el-breadcrumb-item>
             <el-breadcrumb-item>邀请码管理</el-breadcrumb-item>
         </el-breadcrumb>
@@ -56,16 +27,15 @@
                 <el-form :inline="true" >
                     <el-form-item label="邀请码绑定的邮箱">
                         <el-input v-model="searchMap.invitationEmail" placeholder="邀请码绑定的邮箱"></el-input></el-form-item>
+                    <el-form-item label="邀请码号码">
+                        <el-input v-model="searchMap.invitationCode" placeholder="邀请码号码"></el-input></el-form-item>
 
                     <el-button type="primary" @click="fetchData()">查询</el-button>
-                    <!--测试删除功能的时候可以用-->
-<!--                    <el-button type="primary" @click="formVisible=true;pojo={}">新增</el-button>-->
                     <el-button type="primary" @click="addFormVisible=true">批量新增</el-button>
                 </el-form>
             </div>
 
             <el-table :data="tableData" border style="width: 100%">
-<!--                <el-table-column prop="invitationId" label="邀请码id" width="100"></el-table-column>-->
                 <el-table-column prop="invitationCode" label="邀请码号码" width="200"></el-table-column>
                 <el-table-column prop="invitationLifetime" label="邀请码有效天数" width="80"></el-table-column>
                 <el-table-column prop="invitationEmail" label="邀请码绑定的邮箱" width="220"></el-table-column>
@@ -95,7 +65,6 @@
                 <!--修改的弹出窗口-->
                 <el-dialog  title="编辑" :visible.sync="formVisible" >
                     <el-form label-width="150px">
-<!--                        <el-form-item label="邀请码号码"><el-input v-model="pojo.InvitationCode"></el-input></el-form-item>-->
                         <el-form-item label="邀请码有效天数"><el-input v-model="pojo.invitationLifetime"></el-input></el-form-item>
                         <el-form-item label="24小时内验证次数"><el-input v-model="pojo.invitationCaptchaCount"></el-input></el-form-item>
                         <el-form-item>
@@ -117,15 +86,12 @@
                     </el-form>
                 </el-dialog>
             </div>
-
         </div>
     </div>
-
-
 </div>
 </body>
+
 <script src="./js/vue.js"></script>
-<!--<script src="./js/axios.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="./js/elementui.js"></script>
 <script>
@@ -158,13 +124,10 @@
             fetchDataAll (){
                 axios.get(`./invitation/selectAll`).then(response => {
                     console.log(response);
-                    // this.tableData = response.data.rows;
-                    // this.total = response.data.total;
                     this.tableData = response.data;
                 });
             },
             save (){
-                // this.pojo.image= this.imageUrl; //如页面有图片上传功能放开注释
                 axios.post(`./invitation/${this.pojo.invitationId == null?'insert':'update'}`,this.pojo).then(response => {
                     this.fetchData (); //刷新列表
                     this.formVisible = false ;//关闭窗口
@@ -182,7 +145,6 @@
                 axios.get(`./invitation/selectById?id=${invitationId}`).then(response => {
                     console.log(response);
                     this.pojo = response.data;
-                    // this.imageUrl=this.pojo.image //显示图片  如页面有图片上传功能放开注释
                 })
             },
             dele (invitationId){
@@ -195,22 +157,6 @@
                         this.fetchData (); //刷新列表
                     })
                 })
-            },
-            /*****图片上传相关代码  如页面有图片上传功能放开注释 **** */
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = file.response;
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
             }
         }
     })
