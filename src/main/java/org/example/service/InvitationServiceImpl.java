@@ -281,8 +281,8 @@ public class InvitationServiceImpl implements InvitationService {
         if (captcha.getCaptchaReceiveTime().getTime() < oneHourAgo) {
             map.put("remainCount", remainCount + "");
             captchaResult.setData(map);
-            captchaResult.setCode(OUTDATED);
-            captchaResult.setMsg("验证码已过期");
+            captchaResult.setCode(NOTRECEIVE); // 其实这里是验证码已经过期, 但是考虑到实际逻辑, 修改为未收到
+            captchaResult.setMsg("验证码还未收到");
             return captchaResult;
         }
 
