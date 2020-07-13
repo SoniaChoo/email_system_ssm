@@ -26,15 +26,18 @@
             <div class="filter-container">
                 <!--查询表单-->
                 <el-form :inline="true" >
-                    <el-form-item label="账号">
-                        <el-input v-model="searchMap.accountEmail" placeholder="请输入账号"></el-input></el-form-item>
+                    <el-form-item label="账号昵称">
+                        <el-input v-model="searchMap.accountNickname" placeholder="请输入账号昵称"></el-input></el-form-item>
+                    <el-form-item label="账号邮箱">
+                        <el-input v-model="searchMap.accountEmail" placeholder="请输入账号邮箱"></el-input></el-form-item>
                     <el-button type="primary" @click="fetchData()">查询</el-button>
                     <el-button type="primary" @click="formVisible=true;pojo={}">新增</el-button>
                 </el-form>
             </div>
 
             <el-table :data="tableData" border style="width: 100%">
-                <el-table-column prop="accountEmail" label="账号" width="400"></el-table-column>
+                <el-table-column prop="accountNickname" label="账号昵称" width="100"></el-table-column>
+                <el-table-column prop="accountEmail" label="账号邮箱" width="400"></el-table-column>
                 <el-table-column prop="accountPassword" label="密码" width="350"></el-table-column>
                 <el-table-column prop="accountUsingCount" label="账号使用人数" width="200"></el-table-column>
                 <el-table-column label="操作" >
@@ -60,7 +63,8 @@
                 <!--修改和新增的弹出窗口-->
                 <el-dialog  title="编辑" :visible.sync="formVisible" >
                     <el-form label-width="150px">
-                        <el-form-item label="账号"><el-input v-model="pojo.accountEmail"></el-input></el-form-item>
+                        <el-form-item label="账号昵称"><el-input v-model="pojo.accountNickname"></el-input></el-form-item>
+                        <el-form-item label="账号邮箱"><el-input v-model="pojo.accountEmail"></el-input></el-form-item>
                         <el-form-item label="密码"><el-input v-model="pojo.accountPassword"></el-input></el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="save()">保存</el-button>

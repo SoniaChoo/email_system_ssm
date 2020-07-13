@@ -15,6 +15,7 @@ import java.io.Serializable;
 public class Account implements Serializable {
     @Id
     private String accountId;
+    private String accountNickname;
     private String accountEmail;
     private String accountPassword;
     private Integer accountUsingCount;

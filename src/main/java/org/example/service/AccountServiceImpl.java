@@ -17,6 +17,7 @@ import java.util.UUID;
 @Service
 public class AccountServiceImpl implements AccountService {
     String accountId = "accountId";
+    String accountNickname = "accountNickname";
     String accountEmail = "accountEmail";
     String accountPassword = "accountPassword";
     String accountUsingCount = "accountUsingCount";
@@ -92,6 +93,9 @@ public class AccountServiceImpl implements AccountService {
         if (searchMap != null) {
             if (searchMap.get(accountId) != null && !"".equals(searchMap.get(accountId))) {
                 criteria.andEqualTo(accountId, searchMap.get(accountId));
+            }
+            if (searchMap.get(accountNickname)!=null && !"".equals(searchMap.get(accountNickname))) {
+                criteria.andEqualTo(accountNickname, searchMap.get(accountNickname));
             }
             if (searchMap.get(accountEmail) != null && !"".equals(searchMap.get(accountEmail))) {
                 criteria.andEqualTo(accountEmail, searchMap.get(accountEmail));

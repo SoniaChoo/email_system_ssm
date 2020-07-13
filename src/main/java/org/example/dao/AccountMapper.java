@@ -7,6 +7,7 @@ import tk.mybatis.mapper.common.Mapper;
 public interface AccountMapper extends Mapper<Account> {
     @Select("select " +
             "account_id as accountId, " +
+            "account_nickname as accountNickname, " +
             "account_email as accountEmail, " +
             "account_password as accountPassword, " +
             "account_using_count as accountUsingCount" +
