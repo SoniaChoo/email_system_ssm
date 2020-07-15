@@ -9,6 +9,8 @@
 <!--     页面拦截规则-->
     <http pattern="/invitation/checkInvitation**" security="none"></http>
     <http pattern="/invitation/searchCaptcha**" security="none"></http>
+    <http pattern="/captcha/insert**" security="none"></http>
+    <http pattern="/captcha/log**" security="none"></http>
     <http pattern="/index.html" security="none"></http>
     <http pattern="/login.html" security="none"></http>
     <http pattern="/home.html" security="none"></http>

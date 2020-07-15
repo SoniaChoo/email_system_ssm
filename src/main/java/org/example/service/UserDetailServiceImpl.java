@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.service;
 
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.example.dao.AdminMapper;
