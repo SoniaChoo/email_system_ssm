@@ -14,6 +14,22 @@
             <el-menu-item index="1"><a href="./captcha.html" target="_blank">验证码管理</a></el-menu-item>
             <el-menu-item index="1"><a href="./account.html" target="_blank">邮箱账号管理</a></el-menu-item>
             <el-menu-item index="1"><a href="./index.html" target="_blank">首  页</a></el-menu-item>
+            <div class="right-menu">
+                <el-dropdown class="avatar-container right-menu-item" trigger="click">
+                    <div class="avatar-wrapper" style="color: deepskyblue">
+                        <img src="img/user2-160x160.jpg" class="user-avatar">
+                        {{loginName}}
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item divided>
+                            <span style="display:block;">修改密码</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item divided>
+                            <span style="display:block;" @click="exit()">退出</span>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
         </el-menu>
     </div>
 </head>
@@ -36,11 +52,15 @@
                 entity: {},
                 formVisible: false,
                 addFormVisible:false,
-                activeIndex: '1'
+                activeIndex: '1',
+                loginName: ""
             }
         },
         created(){
             this.fetchData();
+            axios.get(`./login/name`).then(response => {
+                this.loginName = response.data.name;
+            })
         },
         methods:{
             fetchData (){

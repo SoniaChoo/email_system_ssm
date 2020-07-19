@@ -25,7 +25,8 @@
 
     <http>
 <!--        <intercept-url pattern="login.html" access="permitAll()"></intercept-url>-->
-        <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+<!--        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"></intercept-url>-->
 <!--        <form-login></form-login>-->
         <form-login
                 login-page="/login.html"
@@ -47,8 +48,22 @@
             <user-service>
 <!--                <user name="admin" password="{noop}123456" authorities="ROLE_ADMIN"/>-->
                 <user name="wangpanhuiyuan_admin" password="{bcrypt}$2a$10$MHgIlNyehPqj5xAzvDb0mOJqDn6gzP4E9pmupFgAEqPpuizWBFvzq" authorities="ROLE_ADMIN"/>
-                <user name="sonia" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_ADMIN"/>
+                <user name="sonia" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_USER"/>
+                <user name="tony" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_ADMIN"/>
+                <user name="wangpanhuiyuan_user" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_USER"/>
             </user-service>
         </authentication-provider>
     </authentication-manager>
+
+    <beans:bean id="invitationController" class="org.example.controller.InvitationController">
+        <intercept-methods>
+            <protect method="insertMany" access="ROLE_ADMIN"/>
+        </intercept-methods>
+    </beans:bean>
+
+<!--    <beans:bean id="invitationServiceImpl" class="org.example.service.InvitationServiceImpl">-->
+<!--        <intercept-methods>-->
+<!--            <protect method="selectPage" access="ROLE_ADMIN"/>-->
+<!--        </intercept-methods>-->
+<!--    </beans:bean>-->
 </beans:beans>
