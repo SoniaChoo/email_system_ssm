@@ -17,14 +17,11 @@
             <div class="right-menu">
                 <el-dropdown class="avatar-container right-menu-item" trigger="click">
                     <div class="avatar-wrapper" style="color: deepskyblue">
-                        <img src="img/user2-160x160.jpg" class="user-avatar">
+                        <img src="./img/user.png" class="user-avatar">
                         {{loginName}}
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item divided>
-                            <span style="display:block;">修改密码</span>
-                        </el-dropdown-item>
-                        <el-dropdown-item divided>
+                        <el-dropdown-item>
                             <span style="display:block;" @click="exit()">退出</span>
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -99,6 +96,11 @@
                     axios.get(`./captcha/delete?id=${captchaId}`).then(response => {
                         this.fetchData (); //刷新列表
                     })
+                })
+            },
+            exit(){
+                axios.post('/logout').then(response=>{
+                    location.href="login.html";
                 })
             }
         }

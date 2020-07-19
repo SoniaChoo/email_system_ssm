@@ -34,7 +34,7 @@
                 authentication-failure-url="/login_error.html"
                 username-parameter="username"
                 password-parameter="password"/>
-        <logout/>
+        <logout invalidate-session="true"/>
         <!--关闭csrf验证   跨站请求伪造  token-->
         <csrf disabled="true"></csrf>
         <!--同源策略-->
@@ -50,7 +50,7 @@
                 <user name="wangpanhuiyuan_admin" password="{bcrypt}$2a$10$MHgIlNyehPqj5xAzvDb0mOJqDn6gzP4E9pmupFgAEqPpuizWBFvzq" authorities="ROLE_ADMIN"/>
                 <user name="sonia" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_USER"/>
                 <user name="tony" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_ADMIN"/>
-                <user name="wangpanhuiyuan_user" password="{bcrypt}$2a$10$Y4zvzpDilRjXgWTU.i.5GO4PMd91Pzv2IGxqSh1ZknyChwnIipwXi" authorities="ROLE_USER"/>
+                <user name="wangpanhuiyuan_user" password="{bcrypt}$2a$10$wmo0I3giUwTxUVh3.aTbO.IOEczGrSMxa2k/tMweXXzS1FD8HBE/u" authorities="ROLE_USER"/>
             </user-service>
         </authentication-provider>
     </authentication-manager>

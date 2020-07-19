@@ -24,6 +24,14 @@ public class Util {
 //        System.out.println("\n\n\n");
 //        System.out.println(insert);
 //    }
+
+    public static void main(String[] args) {
+        String salt = BCrypt.gensalt();
+        String pwtext = "SHURUMIMA";
+        String password = BCrypt.hashpw(pwtext, salt);
+        System.out.println(password);
+    }
+
     public static String getCaptchCodeByRegex(String html) {
         Pattern p = Pattern.compile("\\d{6}"); // 6位数字
         Matcher m = p.matcher(html);
@@ -42,8 +50,8 @@ public class Util {
                 System.out.println("UUID format error!");
                 return null;
             }
-            String uuidCode = split[0]+split[1]+split[2];
-            codeList.add(prefix+uuidCode);
+            String uuidCode = split[0] + split[1] + split[2];
+            codeList.add(prefix + uuidCode);
         }
         return codeList;
     }
