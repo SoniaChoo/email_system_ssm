@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entity.CaptchaResult;
 import org.example.entity.InvitationResult;
 import org.example.entity.PageResult;
+import org.example.entity.Result;
 import org.example.pojo.Invitation;
 
 import java.util.List;
@@ -25,7 +26,10 @@ public interface InvitationService {
     PageResult<Invitation> selectPage(Map<String, Object> searchMap, int page, int size);
 
     //增加新数据
-    public void insert(Invitation invitation);
+    public int insert(Invitation invitation);
+
+    //批量生成邀请码
+    public InvitationResult insertMany(int lifetime, int count);
 
     //修改数据
     public void update(Invitation invitation);

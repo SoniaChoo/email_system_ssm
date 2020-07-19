@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UtilResult implements Serializable {
+public class UtilRequest implements Serializable {
     private Integer invitationLifetime;
     private Integer count;
 }

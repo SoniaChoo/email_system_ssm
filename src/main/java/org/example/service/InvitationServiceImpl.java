@@ -2,6 +2,9 @@ package org.example.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 import org.example.dao.AccountMapper;
 import org.example.dao.CaptchaMapper;
@@ -9,9 +12,11 @@ import org.example.dao.InvitationMapper;
 import org.example.entity.CaptchaResult;
 import org.example.entity.InvitationResult;
 import org.example.entity.PageResult;
+import org.example.entity.Result;
 import org.example.pojo.Account;
 import org.example.pojo.Captcha;
 import org.example.pojo.Invitation;
+import org.example.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,14 +72,32 @@ public class InvitationServiceImpl implements InvitationService {
         return new PageResult<Invitation>(invitations.getResult(), invitations.getTotal());
     }
 
-    public void insert(Invitation invitation) {
+    public int insert(Invitation invitation) {
         if (invitation.getInvitationId() == null) {
             invitation.setInvitationId(UUID.randomUUID().toString());
         }
         if (invitation.getInvitationCaptchaCount() == null) {
             invitation.setInvitationCaptchaCount(0);
         }
-        invitationMapper.insert(invitation);
+        return invitationMapper.insert(invitation);
+    }
+
+    public InvitationResult insertMany(int lifetime, int count) {
+        List<String> codes = Util.generateInvitationCode(lifetime + "tian", count);
+        int successCount = 0;
+        for (String code : codes) {
+            Invitation invitation = new Invitation();
+            invitation.setInvitationCode(code);
+            invitation.setInvitationLifetime(lifetime);
+            int returnCode = insert(invitation);
+            successCount += returnCode;
+        }
+
+        InvitationResult result = new InvitationResult();
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("successCount", "" + successCount);
+        result.setData(data);
+        return result;
     }
 
     public void update(Invitation invitation) {

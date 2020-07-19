@@ -3,7 +3,6 @@ package org.example.controller;
 import org.example.entity.*;
 import org.example.pojo.Invitation;
 import org.example.service.InvitationService;
-import org.example.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +54,20 @@ public class InvitationController {
     @PostMapping("/insert")
     @ResponseBody
     public Result insert(@RequestBody Invitation invitation) {
-        invitationService.insert(invitation);
-        return new Result();
+        int resultCount = invitationService.insert(invitation);
+        Result result = new Result();
+        if (resultCount != 1) {
+            result.setCode(result.WRONG);
+            result.setMessage("failed to insert.");
+        }
+        return result;
+    }
+
+    @RequestMapping("/insertMany")
+    @ResponseBody
+    public InvitationResult insertMany(@RequestBody UtilRequest utilRequest) {
+        InvitationResult result = invitationService.insertMany(utilRequest.getInvitationLifetime(), utilRequest.getCount());
+        return result;
     }
 
     @PostMapping("/update")
@@ -86,12 +97,5 @@ public class InvitationController {
     public CaptchaResult searchCaptcha(String invitationCode, String captchaTo) {
         CaptchaResult captchaResult = invitationService.searchCaptcha(invitationCode, captchaTo);
         return captchaResult;
-    }
-
-    @RequestMapping("/insertMany")
-    @ResponseBody
-    public Result insertMany(@RequestBody UtilResult utilResult) {
-        Util.generateInvitationCode(utilResult.getInvitationLifetime() + "test", utilResult.getCount());
-        return new Result();
     }
 }
