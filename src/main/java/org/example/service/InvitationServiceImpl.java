@@ -97,6 +97,7 @@ public class InvitationServiceImpl implements InvitationService {
         Map<String, String> data = new HashMap<String, String>();
         data.put("successCount", "" + successCount);
         result.setData(data);
+        result.setInvitations(codes);
         return result;
     }
 
