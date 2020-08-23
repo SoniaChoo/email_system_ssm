@@ -120,6 +120,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Captcha.class);
         Example.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("captcha_receive_time desc");
         if (searchMap != null) {
             if (searchMap.get("captchaId") != null && !"".equals(searchMap.get("captchaId"))) {
                 criteria.andEqualTo("captchaId", searchMap.get("captchaId"));

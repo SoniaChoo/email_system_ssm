@@ -326,6 +326,7 @@ public class InvitationServiceImpl implements InvitationService {
     private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Invitation.class);
         Example.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("invitation_activate_time desc");
         if (searchMap != null) {
             if (searchMap.get(invitationId) != null && !"".equals(searchMap.get(invitationId))) {
                 criteria.andEqualTo(invitationId, searchMap.get(invitationId));

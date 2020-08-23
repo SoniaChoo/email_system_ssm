@@ -90,6 +90,7 @@ public class AccountServiceImpl implements AccountService {
     private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Account.class);
         Example.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("account_using_count desc");
         if (searchMap != null) {
             if (searchMap.get(accountId) != null && !"".equals(searchMap.get(accountId))) {
                 criteria.andEqualTo(accountId, searchMap.get(accountId));
