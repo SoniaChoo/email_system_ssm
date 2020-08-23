@@ -40,6 +40,8 @@
                 <el-table-column prop="accountEmail" label="账号邮箱" width="400"></el-table-column>
                 <el-table-column prop="accountPassword" label="密码" width="350"></el-table-column>
                 <el-table-column prop="accountUsingCount" label="账号使用人数" width="200"></el-table-column>
+                <el-table-column prop="accountCreateTime" label="账号生成时间" width="120"></el-table-column>
+                <el-table-column prop="accountUpdateTime" label="账号更新时间" width="120"></el-table-column>
                 <el-table-column label="操作" >
                     <template slot-scope="scope">
                         <el-button @click="edit(scope.row.accountId)" size="mini" type="primary" size="small">修改</el-button>

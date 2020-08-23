@@ -23,4 +23,6 @@ public class Invitation implements Serializable {
     private Date invitationActivateTime;
     private Integer invitationCaptchaCount;
     private Date invitationFirstCaptchaTime;
+    private Date invitationCreateTime;
+    private Date invitationUpdateTime;
 }

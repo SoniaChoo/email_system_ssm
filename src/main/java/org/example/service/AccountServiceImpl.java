@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -69,10 +70,20 @@ public class AccountServiceImpl implements AccountService {
         if (account.getAccountUsingCount() == null) {
             account.setAccountUsingCount(0);
         }
+        if (account.getAccountCreateTime() == null) {
+            account.setAccountCreateTime(new Date());
+        }
+        if (account.getAccountUpdateTime() == null) {
+            account.setAccountUpdateTime(new Date());
+        }
         accountMapper.insert(account);
     }
 
     public void update(Account account) {
+        if (account.getAccountCreateTime() == null) {
+            account.setAccountCreateTime(new Date());
+        }
+        account.setAccountUpdateTime(new Date());
         accountMapper.updateByPrimaryKeySelective(account);
     }
 
@@ -90,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
     private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Account.class);
         Example.Criteria criteria = example.createCriteria();
-        example.setOrderByClause("account_using_count desc");
+        example.setOrderByClause("account_create_time desc");
         if (searchMap != null) {
             if (searchMap.get(accountId) != null && !"".equals(searchMap.get(accountId))) {
                 criteria.andEqualTo(accountId, searchMap.get(accountId));

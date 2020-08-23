@@ -79,6 +79,12 @@ public class InvitationServiceImpl implements InvitationService {
         if (invitation.getInvitationCaptchaCount() == null) {
             invitation.setInvitationCaptchaCount(0);
         }
+        if(invitation.getInvitationCreateTime()==null) {
+            invitation.setInvitationCreateTime(new Date());
+        }
+        if(invitation.getInvitationUpdateTime()==null) {
+            invitation.setInvitationUpdateTime(new Date());
+        }
         return invitationMapper.insert(invitation);
     }
 
@@ -89,6 +95,7 @@ public class InvitationServiceImpl implements InvitationService {
             Invitation invitation = new Invitation();
             invitation.setInvitationCode(code);
             invitation.setInvitationLifetime(lifetime);
+            invitation.setInvitationCreateTime(new Date());
             int returnCode = insert(invitation);
             successCount += returnCode;
         }
@@ -97,11 +104,15 @@ public class InvitationServiceImpl implements InvitationService {
         Map<String, String> data = new HashMap<String, String>();
         data.put("successCount", "" + successCount);
         result.setData(data);
-        result.setInvitations(codes);
+        result.setRows(codes);
         return result;
     }
 
     public void update(Invitation invitation) {
+        if(invitation.getInvitationCreateTime()==null) {
+            invitation.setInvitationCreateTime(new Date());
+        }
+        invitation.setInvitationUpdateTime(new Date());
         invitationMapper.updateByPrimaryKeySelective(invitation);
     }
 
@@ -327,7 +338,7 @@ public class InvitationServiceImpl implements InvitationService {
     private Example createExample(Map<String, Object> searchMap) {
         Example example = new Example(Invitation.class);
         Example.Criteria criteria = example.createCriteria();
-        example.setOrderByClause("invitation_activate_time desc");
+        example.setOrderByClause("invitation_create_time desc");
         if (searchMap != null) {
             if (searchMap.get(invitationId) != null && !"".equals(searchMap.get(invitationId))) {
                 criteria.andEqualTo(invitationId, searchMap.get(invitationId));

@@ -41,6 +41,8 @@
                 <el-table-column prop="invitationActivateTime" label="邀请码激活时间" width="200"></el-table-column>
                 <el-table-column prop="invitationCaptchaCount" label="24小时内验证次数" width="180"></el-table-column>
                 <el-table-column prop="invitationFirstCaptchaTime" label="首次验证时间" width="120"></el-table-column>
+                <el-table-column prop="invitationCreateTime" label="邀请码生成时间" width="120"></el-table-column>
+                <el-table-column prop="invitationUpdateTime" label="邀请码更新时间" width="120"></el-table-column>
                 <el-table-column label="操作"  >
                     <template slot-scope="scope">
                         <el-button @click="edit(scope.row.invitationId)" size="mini" type="primary" size="small">修改</el-button>

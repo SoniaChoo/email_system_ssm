@@ -10,7 +10,9 @@ public interface AccountMapper extends Mapper<Account> {
             "account_nickname as accountNickname, " +
             "account_email as accountEmail, " +
             "account_password as accountPassword, " +
-            "account_using_count as accountUsingCount" +
+            "account_using_count as accountUsingCount, " +
+            "account_create_time as accountCreateTime, " +
+            "account_update_time as accountUpdateTime" +
             " from account order by account_using_count asc limit 1")
     Account selectLeastUsedAccount();
 }
