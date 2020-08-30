@@ -293,7 +293,6 @@ public class InvitationServiceImpl implements InvitationService {
         Example.Criteria criteria1 = captchaExample.createCriteria();
         criteria1.andEqualTo("captchaTo", accountEmail);
         criteria1.andLike("captchaFrom", "%@baidu.com");
-        criteria1.andEqualTo("captchaSubject", "百度帐号--登录保护验证"); //防止有人修改密码
         criteria1.andEqualTo("captchaRead", 0);
         captchaExample.orderBy("captchaReceiveTime").desc();
         List<Captcha> captchas = captchaMapper.selectByExample(captchaExample);

@@ -64,7 +64,12 @@ public class CaptchaServiceImpl implements CaptchaService {
             captcha.setCaptchaReceiveTime(new Date());
         }
         captcha.setCaptchaRead(0);
-
+        // 防止修改密码邮件写入数据库
+        String html = captcha.getCaptchaHtml();
+        if (html.contains("密码") || html.contains("\\u5bc6\\u7801")) {
+            logger.error("email for changing password is denied. 拒收改密码邮件。");
+            return;
+        }
         Map<String, String> map = JSON.parseObject(captcha.getCaptchaFrom(), Map.class);
         captcha.setCaptchaFrom(map.get("email"));
 
